@@ -109,8 +109,8 @@ class NameGeneratorDefault(object):
 
     def full_name(self, sex=None):
         if sex is None:
-            return self.fake.name()
+            return self.fake.name().lower()
         if sex == "m":
-            return self.fake.name_male()
+            return self.fake.name_male().lower()
         if sex == "f":
-            return self.fake.name_female()
+            return self.fake.name_female().lower()
