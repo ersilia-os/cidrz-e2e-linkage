@@ -1,11 +1,13 @@
 import streamlit as st
 from datetime import datetime
 import random
+import os
 
 from e2elink.synthetic.tablegen.singletable import NaiveReferenceTableGenerator
 from e2elink.synthetic.tablegen.linkedtable import ReferenceLinkedTables
 from e2elink.synthetic.tablegen.transform import TableTransformer
 
+SCRIPT_PATH = os.path.dirname(os.path.realpath(__file__))
 
 class Defaults():
 
@@ -53,7 +55,7 @@ src_dupl = st.sidebar.slider(
 )/100
 
 # Dates
-st.sidebar.markdown("### Date")
+st.sidebar.subheader("Date")
 src_date_sorted = st.sidebar.checkbox(
    "Sorted dates",
    value = True
@@ -98,7 +100,7 @@ src_date_missformat_rate = c12.slider(
 )
 
 # Names
-st.sidebar.markdown("### Name")
+st.sidebar.subheader("Name")
 c21, c22 = st.sidebar.beta_columns(2)
 src_name_info = c21.radio(
     'Name information',
@@ -172,7 +174,7 @@ src_name_misspelling_type = c32.radio(
 )
 
 # Age
-st.sidebar.markdown("### Age")
+st.sidebar.subheader("Age")
 c41, c42 = st.sidebar.beta_columns(2)
 src_age_format = c41.radio(
     'Age format',
@@ -207,7 +209,7 @@ src_age_coverage = st.sidebar.slider(
 )/100
 
 # Other
-st.sidebar.markdown("### Other")
+st.sidebar.subheader("Other")
 
 # Identifier
 src_do_identifier = st.sidebar.checkbox(
@@ -274,7 +276,8 @@ trg_dupl = 15
 
 
 if not compute:
-    st.title("Synthetic data generation for record linkage")
+    with open(os.path.join(SCRIPT_PATH, "README.md"), "r") as f:
+        st.markdown(f.read())
 else:
     bc3.button("Download")
     # Source generator

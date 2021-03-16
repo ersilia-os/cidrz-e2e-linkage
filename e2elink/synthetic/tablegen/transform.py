@@ -48,7 +48,8 @@ class TableTransformer(object):
     def _date_format(self, format):
         if format != "%Y-%m-%d":
             self.data["visit_date"] = self.data["visit_date_dt"].dt.strftime(format)
-            self.data["birth_date"] = self.data["birth_date_dt"].dt.strftime(format)
+            if "birth_date" in list(self.data.columns):
+                self.data["birth_date"] = self.data["birth_date_dt"].dt.strftime(format)
 
     def _date_coverage(self, cov):
         idxs = self._select_idxs(1-cov)
