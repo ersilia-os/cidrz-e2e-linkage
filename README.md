@@ -1,3 +1,4 @@
 # End-to-end linkage at CIDRZ
 
-Towards end-to-end linkage for medical records data in low resourced countries.
+This project is the result of a collaborative effort conducted at CIDRZ to perform end-to-end linkage in low resourced-settings.
+
