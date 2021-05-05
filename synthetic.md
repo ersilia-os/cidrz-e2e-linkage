@@ -6,7 +6,7 @@ description: >-
 
 # Synthetic data generation
 
-## Run as part of the e2elink package
+## Run app
 
 ```text
 e2elink run syndata
