@@ -1,3 +1,2 @@
-# End-to-end linkage at CIDRZ
+# Initial page
 
-Towards end-to-end linkage for medical records data in low resourced countries.
