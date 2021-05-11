@@ -4,8 +4,15 @@ import random
 import os
 
 from e2elink.synthetic.tablegen.singletable import NaiveReferenceTableGenerator
-from e2elink.synthetic.tablegen.linkedtable import ReferenceLinkedTables
+from e2elink.synthetic.tablegen.linkedtable import ReferenceLinkedTables, find_ground_truth
 from e2elink.synthetic.tablegen.transform import TableTransformer
+from e2elink.synthetic.utils.saver import save_results
+
+from e2elink.synthetic.misspell.simple import SimpleMisspell
+from e2elink.synthetic.misspell.embedding import EmbeddingMisspell
+
+simple_misspell = None
+embedding_misspell = None
 
 SCRIPT_PATH = os.path.dirname(os.path.realpath(__file__))
 
@@ -39,20 +46,29 @@ class Defaults():
 
 default = Defaults()
 
+folder_name = st.sidebar.text_input("Folder name", value="")
+
 # Source file
-st.sidebar.title(':woman: Source file')
+st.sidebar.title('Source file')
 
 # Basics
-src_size = st.sidebar.slider(
+src_size = st.sidebar.number_input(
     'Number of samples',
-    10, 10000,
-    1000
+    min_value=10, max_value=100000,
+    value=100
 )
 src_dupl = st.sidebar.slider(
     'Proportion of duplicates (%)',
     0, 100,
     10
 )/100
+src_visits = st.sidebar.slider(
+    'Average visits',
+    min_value=1.,
+    max_value=5.,
+    value=1.5,
+    step=0.1
+)
 
 # Dates
 st.sidebar.subheader("Date")
@@ -233,17 +249,17 @@ src_sex_format = random.choice(["lower_abbrv", "upper_abbrv", "lower", "title"])
 
 # Target file
 
-st.sidebar.title(':man: Target file')
+st.sidebar.title('Target file')
 
-trg_size = st.sidebar.slider(
+trg_size = st.sidebar.number_input(
     'Number of samples',
-    10, 50000,
-    10000
+    10, 1000000,
+    1000
 )
 
 # Linkage
 
-st.sidebar.title(':couple: Linkage file')
+st.sidebar.title('Ground truth')
 
 exp_linkage_rate = st.sidebar.slider(
     'Expected linkage rate (%)',
@@ -276,7 +292,7 @@ trg_dupl = 15
 
 
 if not compute:
-    with open(os.path.join(SCRIPT_PATH, "README.md"), "r") as f:
+    with open(os.path.join(SCRIPT_PATH, "INSTRUCTIONS.md"), "r") as f:
         st.markdown(f.read())
 else:
     bc3.button("Download")
@@ -289,7 +305,8 @@ else:
         age_lb = src_age_lb,
         age_ub = src_age_ub,
         female_prop = src_female_prop,
-        duplicates_prop = src_dupl
+        duplicates_prop = src_dupl,
+        average_visits = src_visits
     )
     # Target generator
     trg_gen = NaiveReferenceTableGenerator(
@@ -306,6 +323,16 @@ else:
     lt = ReferenceLinkedTables(src_gen, trg_gen)
     ref_data = lt.sample(src_size, trg_size, exp_linkage_rate)
 
+    # Load misspelling if necessary
+    if src_name_misspelling_type == "Fast":
+        if simple_misspell is None:
+            simple_misspell = SimpleMisspell()
+        ms = simple_misspell
+    if src_name_misspelling_type == "Accurate":
+        if embedding_misspell is None:
+            embedding_misspell = EmbeddingMisspell()
+        ms = embedding_misspell
+
     # Transformers
 
     # Source table
@@ -318,6 +345,7 @@ else:
         "abbreviate_full_name": src_name_abbreviation_rate,
         "misspell_full_name": src_name_misspelling_rate,
         "misspell_type": src_name_misspelling_type,
+        "misspeller": ms,
         "age_format": src_age_format,
         "name_format": src_name_format,
         "split_full_name": src_split_full_name,
@@ -332,8 +360,9 @@ else:
         "sex_format": src_sex_format
     }
     src_tf.transform(src_params)
+    src_uid = src_tf.uid
     src_data = src_tf.data.copy()
-    st.dataframe(src_tf.data)
+    st.dataframe(src_data)
     src_tf = src_tf.reset()
 
     # Target table
@@ -346,6 +375,7 @@ else:
         "abbreviate_full_name": src_name_abbreviation_rate,
         "misspell_full_name": src_name_misspelling_rate,
         "misspell_type": src_name_misspelling_type,
+        "misspeller": None,
         "age_format": "birth_date",
         "name_format": "upper",
         "split_full_name": True,
@@ -360,10 +390,25 @@ else:
         "sex_format": "upper_abbrv"
     }
     trg_tf.transform(trg_params)
+    trg_uid = trg_tf.uid
     trg_data = trg_tf.data.copy()
     st.dataframe(trg_data)
     trg_tf = trg_tf.reset()
 
     # Linkage file
-    st.title("Linkage file")
-    st.dataframe(ref_data["pairs"])
+    st.title("Ground truth")
+    pairs = find_ground_truth(src_uid, trg_uid)
+    st.dataframe(pairs)
+
+    # Truth params
+    truth_params = {
+        "exp_linkage_rate": exp_linkage_rate
+    }
+
+    src_params["size"] = src_size
+    trg_params["size"] = trg_size
+
+    # Saver
+    if folder_name:
+        ROOT = "/Users/mduran/Desktop/"
+        save_results(ROOT, folder_name, src_data, trg_data, pairs, src_params, trg_params, truth_params)

@@ -21,7 +21,7 @@ e2elink run syndata
 
 * **Source file**: The main file of interest.
 * **Target file**: Typically, a large file containing. Source file entries are searched within this file.
-* **Linkage file**: Contains pairs of indices corresponding to source and target rows. This file can be considered to be the ground truth (gold standard).
+* **Ground truth**: Contains pairs of indices corresponding to source and target rows. This file can be considered to be the ground truth (gold standard).
 
 ### Reference columns
 
@@ -42,3 +42,8 @@ e2elink run syndata
   * Calculate similarities between words.
   * Train classifiers.
 * **Generative models**: These models are useful to capture correlations between fields. An example would be a [Generative Adversarial Network](https://sdv.dev/SDV/user_guides/single_table/ctgan.html) (GAN).
+
+# To-do
+
+* Include extra data
+* Target file work on it

@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 
 
 class ReferenceLinkedTables(object):
@@ -14,19 +15,20 @@ class ReferenceLinkedTables(object):
         link_n = int(len(src_idxs)*link_rate)
         link_idxs = np.random.choice(src_idxs, size=link_n, replace=False)
         linked = src_df.iloc[link_idxs].reset_index(drop=True)
-        linked["src_idx"] = link_idxs
         trg_df = self.src_gen.sample(trg_n - linked.shape[0])
-        trg_df["src_idx"] = np.nan
         trg_df = pd.concat([linked, trg_df], ignore_index=True)
         trg_df = trg_df.sample(frac=1).reset_index(drop=True)
-        pdf = trg_df[trg_df["src_idx"].notnull()].sample(frac=1).reset_index(drop=False)
-        pairs_df = pd.DataFrame(
-            {"src_idx": np.array(pdf["src_idx"]).astype(np.int),
-             "trg_idx": pdf["index"]}
-        )
         results = {
             "src": src_df,
-            "trg": trg_df.drop(columns="src_idx"),
-            "pairs": pairs_df
+            "trg": trg_df
         }
         return results
+
+
+def find_ground_truth(src_uid, trg_uid):
+    pairs = []
+    for src_idx, src_id in tqdm(enumerate(src_uid)):
+        for trg_idx, trg_id in enumerate(trg_uid):
+            if src_id == trg_id:
+                pairs += [[src_idx, trg_idx]]
+    return pd.DataFrame(pairs, columns=["src_idx", "trg_idx"])

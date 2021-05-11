@@ -26,7 +26,8 @@ class NaiveReferenceTableGenerator(object):
                  age_lb=10,
                  age_ub=60,
                  female_prop=0.5,
-                 duplicates_prop=0.1):
+                 duplicates_prop=0.1,
+                 average_visits=1.5):
         # Parameters
         self.identifier_type = identifier_type
         self.local = local
@@ -36,6 +37,7 @@ class NaiveReferenceTableGenerator(object):
         self.age_ub = age_ub
         self.female_prop = female_prop
         self.duplicates_prop = duplicates_prop
+        self.average_visits = average_visits
         # Generators
         if self.identifier_type is None:
             self.identifier_generator = IdGeneratorDefault()
@@ -93,6 +95,7 @@ class NaiveReferenceTableGenerator(object):
             bd = d - relativedelta(years=a["years"], days=a["days"])
             birth_date += [bd.strftime("%Y-%m-%d")]
         birth_year = [d.split("-")[0] for d in birth_date]
+
         df = pd.DataFrame(
             {"identifier": identifier,
              "full_name": full_name,
@@ -105,13 +108,24 @@ class NaiveReferenceTableGenerator(object):
         return df
 
     def sample(self, n):
+        # exact duplicates
         prop_dupl = self.duplicates_prop
         n_dupl = int(n*prop_dupl)
         n_samp = n - n_dupl
         n_samp = max(n_samp, 1)
         if n_dupl == n: n_dupl -= 1
-        df = self._sample(n_samp)
+        n_samp_v = int(n_samp/self.average_visits)
+        n_samp_v = max(n_samp_v, 1)
+        n_vis = n_samp - n_samp_v
+        df = self._sample(n_samp_v)
         idxs = [i for i in range(df.shape[0])]
+        if n_vis > 0:
+            df_vis = df.iloc[np.random.choice(idxs, n_vis, replace=True)]
+            _date = self._sample_dates(n_vis)
+            df_vis["visit_date"] = [d.strftime("%Y-%m-%d") for d in _date]
+            df = pd.concat([df, df_vis])
+            df = df.sample(frac=1).reset_index(drop=True)
+            idxs = [i for i in range(df.shape[0])]
         if n_dupl > 0:
             df_dupl = df.iloc[np.random.choice(idxs, n_dupl, replace=True)]
             df = pd.concat([df, df_dupl])

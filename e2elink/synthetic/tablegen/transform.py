@@ -12,6 +12,7 @@ class TableTransformer(object):
         self.data = ref_data.copy()
         self.data["visit_date_dt"] = pd.to_datetime(self.data["visit_date"])
         self.data["birth_date_dt"] = pd.to_datetime(self.data["birth_date"])
+        self.data["uid"] = list(self.data["identifier"])
 
     def _select_idxs(self, rate):
         n = self.data.shape[0]
@@ -98,8 +99,11 @@ class TableTransformer(object):
             ids[i] = np.nan
         self.data[col] = ids
 
-    def _misspell_full_name(self, rate):
-        ms = SimpleMisspell()
+    def _misspell_full_name(self, rate, misspeller):
+        if misspeller is None:
+            ms = SimpleMisspell()
+        else:
+            ms = misspeller
         idxs = self._select_idxs(rate)
         names = self._column_as_list("full_name")
         js = np.random.choice([0, 1], len(idxs), replace=True)
@@ -209,7 +213,11 @@ class TableTransformer(object):
                 self._hide_identifier()
 
         if "misspell_full_name" in params:
-            self._misspell_full_name(params["misspell_full_name"])
+            if "misspeller" not in params:
+                misspeller = None
+            else:
+                misspeller = params["misspeller"]
+            self._misspell_full_name(params["misspell_full_name"], misspeller)
 
         if "swap_full_name" in params:
             self._swap_full_name(params["swap_full_name"])
@@ -234,7 +242,8 @@ class TableTransformer(object):
         if "name_coverage" in params:
             self._full_name_coverage(params["name_coverage"])
 
-        self.data = self.data.drop(columns=["visit_date_dt", "birth_date_dt"])
+        self.uid = list(self.data["uid"])
+        self.data = self.data.drop(columns=["visit_date_dt", "birth_date_dt", "uid"])
         self.data.fillna("", inplace=True)
 
         if "rename_columns" in params:
