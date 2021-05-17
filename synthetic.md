@@ -14,7 +14,7 @@ e2elink run syndata
 
 ## Motivation
 
-* Anonymize Personally Identifieable Information \(PII\)
+* Anonymize Personally Identifiable Information \(PII\)
 * Lack of gold standards
 * Small and large files
 * Test linkage pipelines under different conditions
