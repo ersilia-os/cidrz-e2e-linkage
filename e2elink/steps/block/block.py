@@ -4,7 +4,6 @@ import numpy as np
 
 
 class Block(object):
-
     def __init__(self, pairs, k):
         self.pairs = pairs
         self.k = k
@@ -18,7 +17,6 @@ class Block(object):
 
 
 class Blocker(object):
-
     def __init__(self):
         self.vectorizer = NameNgramVectorizer()
 

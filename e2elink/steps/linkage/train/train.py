@@ -2,7 +2,6 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 class Model(object):
-
     def __init__(self):
         self.clf = RandomForestClassifier(class_weight="balanced", n_jobs=-1)
 
@@ -27,7 +26,6 @@ class Model(object):
 
 
 class LinkageModelTrainer(object):
-
     def __init__(self, identifier):
         pass
 

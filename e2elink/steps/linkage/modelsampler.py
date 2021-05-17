@@ -9,7 +9,6 @@ MAX_N = 10000
 
 
 class ModelSampler(object):
-
     def __init__(self, data):
         if data.shape[0] > MAX_N:
             self.data = data.sample(n=MAX_N)
@@ -20,7 +19,9 @@ class ModelSampler(object):
         self.data_path = os.path.join(self.models_path, "data", "comparisons")
 
     def _load_data(self, identifier):
-        df = pd.read_csv(os.path.join(self.data_path, identifier+".tsv"), delimiter="\t")
+        df = pd.read_csv(
+            os.path.join(self.data_path, identifier + ".tsv"), delimiter="\t"
+        )
         if df.shape[0] > self.data.shape[0]:
             df = df.sample(n=self.data.shape[0])
         else:
@@ -28,7 +29,7 @@ class ModelSampler(object):
         return df
 
     def _load_model(self, identifier):
-        mdl = joblib.load(os.path.join(self.checkpoints_path, identifier+".pkl"))
+        mdl = joblib.load(os.path.join(self.checkpoints_path, identifier + ".pkl"))
         return mdl
 
     def score_samples(self):

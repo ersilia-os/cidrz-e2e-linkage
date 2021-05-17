@@ -9,11 +9,12 @@ from ... import DATA_PATH
 
 
 class NameGenerator(object):
-
     def __init__(self):
         self.script_path = os.path.dirname(os.path.realpath(__file__))
-        zam_first = pd.read_csv(os.path.join(DATA_PATH, "zambia_firstnames.tsv"), sep="\t")
-        zam_last  = pd.read_csv(os.path.join(DATA_PATH, "zambia_surnames.tsv"), sep="\t")
+        zam_first = pd.read_csv(
+            os.path.join(DATA_PATH, "zambia_firstnames.tsv"), sep="\t"
+        )
+        zam_last = pd.read_csv(os.path.join(DATA_PATH, "zambia_surnames.tsv"), sep="\t")
         df_m = zam_first[zam_first["sex"] == "m"]
         df_f = zam_first[zam_first["sex"] == "f"]
         self.first_all = np.array(zam_first["name"])
@@ -75,11 +76,20 @@ class NameGenerator(object):
 
 
 class NameGeneratorRough(object):
-
     def __init__(self):
         self.script_path = os.path.dirname(os.path.realpath(__file__))
-        self.first = list(pd.read_csv(os.path.join(DATA_PATH, "first_names_moe.all.txt"), sep="\t", header=None)[0])
-        self.last  = list(pd.read_csv(os.path.join(DATA_PATH, "last_names_moe.all.txt"), sep="\t", header=None)[0])
+        self.first = list(
+            pd.read_csv(
+                os.path.join(DATA_PATH, "first_names_moe.all.txt"),
+                sep="\t",
+                header=None,
+            )[0]
+        )
+        self.last = list(
+            pd.read_csv(
+                os.path.join(DATA_PATH, "last_names_moe.all.txt"), sep="\t", header=None
+            )[0]
+        )
 
     def first_name(self):
         return np.random.choice(self.first)
@@ -92,7 +102,6 @@ class NameGeneratorRough(object):
 
 
 class NameGeneratorDefault(object):
-
     def __init__(self):
         self.fake = Faker()
 

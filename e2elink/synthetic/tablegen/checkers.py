@@ -1,6 +1,4 @@
-
 class NameChecker(object):
-
     def __init__(self, text):
         self.text = text
         self.is_empty()

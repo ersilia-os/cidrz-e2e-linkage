@@ -17,17 +17,18 @@ MODELS_PATH = "/Users/mduran/Desktop/test/"
 
 
 class NaiveReferenceTableGenerator(object):
-
-    def __init__(self,
-                 identifier_type=None,
-                 local=False,
-                 date_lb="2010-01-01",
-                 date_ub="2020-12-31",
-                 age_lb=10,
-                 age_ub=60,
-                 female_prop=0.5,
-                 duplicates_prop=0.1,
-                 average_visits=1.5):
+    def __init__(
+        self,
+        identifier_type=None,
+        local=False,
+        date_lb="2010-01-01",
+        date_ub="2020-12-31",
+        age_lb=10,
+        age_ub=60,
+        female_prop=0.5,
+        duplicates_prop=0.1,
+        average_visits=1.5,
+    ):
         # Parameters
         self.identifier_type = identifier_type
         self.local = local
@@ -38,7 +39,7 @@ class NaiveReferenceTableGenerator(object):
         self.female_prop = female_prop
         self.duplicates_prop = duplicates_prop
         self.average_visits = average_visits
-        # Generators
+        # Generators
         if self.identifier_type is None:
             self.identifier_generator = IdGeneratorDefault()
         else:
@@ -54,12 +55,12 @@ class NaiveReferenceTableGenerator(object):
         return [self.identifier_generator.sample() for _ in range(n)]
 
     def _sample_names(self, n):
-        n_females = int(n*self.female_prop)
+        n_females = int(n * self.female_prop)
         n_males = n - n_females
         females = [self.name_generator.full_name(sex="f") for _ in range(n_females)]
         males = [self.name_generator.full_name(sex="m") for _ in range(n_males)]
         names = males + females
-        sexs = ["m"]*len(males) + ["f"]*len(females)
+        sexs = ["m"] * len(males) + ["f"] * len(females)
         idxs = [i for i in range(len(names))]
         random.shuffle(idxs)
         names = [names[i] for i in idxs]
@@ -67,12 +68,14 @@ class NaiveReferenceTableGenerator(object):
         return {"name": names, "sex": sexs}
 
     def _sample_dates(self, n):
-        dates = [self.date_generator.sample(self.date_lb, self.date_ub) for _ in range(n)]
+        dates = [
+            self.date_generator.sample(self.date_lb, self.date_ub) for _ in range(n)
+        ]
         return dates
 
     def _sample_ages(self, n):
         loc = np.mean([self.age_lb, self.age_ub])
-        scale = (self.age_ub - loc)/ 1.96
+        scale = (self.age_ub - loc) / 1.96
         ages = [self.age_generator.sample(loc=loc, scale=scale) for _ in range(n)]
         return ages
 
@@ -97,24 +100,27 @@ class NaiveReferenceTableGenerator(object):
         birth_year = [d.split("-")[0] for d in birth_date]
 
         df = pd.DataFrame(
-            {"identifier": identifier,
-             "full_name": full_name,
-             "sex": sex,
-             "birth_date": birth_date,
-             "birth_year": birth_year,
-             "age": age,
-             "visit_date": visit_date}
+            {
+                "identifier": identifier,
+                "full_name": full_name,
+                "sex": sex,
+                "birth_date": birth_date,
+                "birth_year": birth_year,
+                "age": age,
+                "visit_date": visit_date,
+            }
         )
         return df
 
     def sample(self, n):
         # exact duplicates
         prop_dupl = self.duplicates_prop
-        n_dupl = int(n*prop_dupl)
+        n_dupl = int(n * prop_dupl)
         n_samp = n - n_dupl
         n_samp = max(n_samp, 1)
-        if n_dupl == n: n_dupl -= 1
-        n_samp_v = int(n_samp/self.average_visits)
+        if n_dupl == n:
+            n_dupl -= 1
+        n_samp_v = int(n_samp / self.average_visits)
         n_samp_v = max(n_samp_v, 1)
         n_vis = n_samp - n_samp_v
         df = self._sample(n_samp_v)
@@ -134,11 +140,12 @@ class NaiveReferenceTableGenerator(object):
 
 
 class ReferenceTableGenerator(object):
-
     def __init__(self, data, model_id=None):
         self.data = data
         if model_id is None:
-            self.model_id = hashlib.sha1(pd.util.hash_pandas_object(data).values).hexdigest()
+            self.model_id = hashlib.sha1(
+                pd.util.hash_pandas_object(data).values
+            ).hexdigest()
         else:
             self.model_id = model_id
         self.model_path = self._get_model_path()
@@ -155,11 +162,7 @@ class ReferenceTableGenerator(object):
         self.model.save(self.model_path)
 
     def fit(self):
-        self.model = Model(
-            anonymize_fields = {
-                "full_name": "name"
-            }
-        )
+        self.model = Model(anonymize_fields={"full_name": "name"})
         self.model.fit(self.data)
         self._save()
 

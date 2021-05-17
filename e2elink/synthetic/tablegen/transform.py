@@ -8,7 +8,6 @@ from ..misspell.simple import SimpleMisspell
 
 
 class TableTransformer(object):
-
     def __init__(self, ref_data):
         self.ref_data = ref_data
         self.data = ref_data.copy()
@@ -19,7 +18,7 @@ class TableTransformer(object):
     def _select_idxs(self, rate, n=None):
         if n is None:
             n = self.data.shape[0]
-        f = int(n*rate)
+        f = int(n * rate)
         idxs = [i for i in range(n)]
         return np.random.choice(idxs, f, replace=False)
 
@@ -36,7 +35,7 @@ class TableTransformer(object):
         self.data["full_name"] = names
 
     def _age_coverage(self, cov):
-        idxs = self._select_idxs(1-cov)
+        idxs = self._select_idxs(1 - cov)
         col = self._age_format
         age_data = self._column_as_list(col)
         for i in idxs:
@@ -58,7 +57,7 @@ class TableTransformer(object):
                 self.data["entry_date"] = self.data["entry_date_dt"].dt.strftime(format)
 
     def _date_coverage(self, cov, col=None):
-        idxs = self._select_idxs(1-cov)
+        idxs = self._select_idxs(1 - cov)
         if col is None:
             col = "visit_date"
         dates = self._column_as_list(col)
@@ -79,7 +78,7 @@ class TableTransformer(object):
         self.data["full_name"] = names
 
     def _full_name_coverage(self, cov):
-        idxs = self._select_idxs(1-cov)
+        idxs = self._select_idxs(1 - cov)
         if "full_name" in list(self.data.columns):
             names = self._column_as_list("full_name")
             for i in idxs:
@@ -103,8 +102,8 @@ class TableTransformer(object):
         ids_idxs = collections.defaultdict(list)
         for i, id in enumerate(ids):
             ids_idxs[id] += [i]
-        uids = [k for k,v in ids_idxs.items()]
-        idxs = self._select_idxs(1-cov, len(uids))
+        uids = [k for k, v in ids_idxs.items()]
+        idxs = self._select_idxs(1 - cov, len(uids))
         for i in idxs:
             for j in ids_idxs[uids[i]]:
                 ids[j] = np.nan
@@ -118,7 +117,7 @@ class TableTransformer(object):
         idxs = self._select_idxs(rate)
         names = self._column_as_list("full_name")
         js = np.random.choice([0, 1], len(idxs), replace=True)
-        for i,j in zip(idxs, js):
+        for i, j in zip(idxs, js):
             name = names[i].split(" ")
             if len(name) == 0:
                 j = 0
@@ -193,7 +192,7 @@ class TableTransformer(object):
         if idx == 0:
             columns = ["first_name", "last_name"] + columns[1:]
         else:
-            columns = columns[:idx] + ["first_name", "last_name"] + columns[(idx+1):]
+            columns = columns[:idx] + ["first_name", "last_name"] + columns[(idx + 1) :]
         self.data["first_name"] = first_names
         self.data["last_name"] = last_names
         self.data = self.data[columns]
@@ -218,10 +217,10 @@ class TableTransformer(object):
         self.data["entry_date"] = self.data["entry_date_dt"].dt.strftime(format)
 
     def _clinical_variable(self):
-        do = np.random.choice([0,1])
+        do = np.random.choice([0, 1])
         n = self.data.shape[0]
         if do == 0:
-            options = [0,1]
+            options = [0, 1]
         else:
             options = ["Positive", "Negative"]
         values = np.random.choice(options, n, replace=True)
@@ -294,7 +293,11 @@ class TableTransformer(object):
             self._clinical_variable()
 
         self.uid = list(self.data["uid"])
-        cols2drop = list(set(["visit_date_dt", "birth_date_dt", "entry_date_dt", "uid"]).intersection(list(self.data.columns)))
+        cols2drop = list(
+            set(
+                ["visit_date_dt", "birth_date_dt", "entry_date_dt", "uid"]
+            ).intersection(list(self.data.columns))
+        )
         self.data = self.data.drop(columns=cols2drop)
         self.data.fillna("", inplace=True)
 

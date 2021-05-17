@@ -5,7 +5,6 @@ import numpy as np
 
 
 class ArtNumber(object):
-
     def __init__(self, art, clean=True):
         art = str(art)
         if clean:
@@ -101,7 +100,12 @@ class ArtNumber(object):
         fac = self.get_facility()
         dis = self.get_district()
         dig = self.calc_checkdigit()
-        if str(cod) == "nan" or str(fac) == "nan" or str(dis) == "nan" or str(dig) == "nan":
+        if (
+            str(cod) == "nan"
+            or str(fac) == "nan"
+            or str(dis) == "nan"
+            or str(dig) == "nan"
+        ):
             return np.nan
         else:
-            return dis+"-"+fac+"-"+cod+"-"+dig
+            return dis + "-" + fac + "-" + cod + "-" + dig

@@ -3,7 +3,6 @@ from ...vectorize.namegeneric import NameGenericVectorizer
 
 
 class EmbeddingMisspell(object):
-
     def __init__(self):
         self.ngv = NameGenericVectorizer()
 

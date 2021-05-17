@@ -13,8 +13,8 @@ from ... import DATA_PATH, MODELS_PATH
 
 MAX = 50
 
-class MoeMisspell(object):
 
+class MoeMisspell(object):
     def __init__(self):
         self.script_path = os.path.dirname(os.path.realpath(__file__))
         self.data_path = os.path.join(DATA_PATH, "moe_misspellings_train.tsv")

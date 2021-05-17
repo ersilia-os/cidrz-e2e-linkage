@@ -3,16 +3,14 @@ import textdistance
 
 
 class LevenshteinSimilarity(object):
-
     def __init__(self):
         self.label = "lev"
 
     def calculate(self, a, b):
-        return fuzz.ratio(a, b)/100.
+        return fuzz.ratio(a, b) / 100.0
 
 
 class JaroWinklerSimilarity(object):
-
     def __init__(self):
         self.label = "jw"
 
@@ -21,7 +19,6 @@ class JaroWinklerSimilarity(object):
 
 
 class MatchRatingApproach(object):
-
     def __init__(self):
         self.label = "mra"
 

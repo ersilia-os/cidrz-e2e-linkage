@@ -16,6 +16,7 @@ from .misspell.embedding import EmbeddingMisspell
 simple_misspell = SimpleMisspell()
 embedding_misspell = None
 
+
 def get_misspeller(name_misspelling_type):
     # TODO
     return SimpleMisspell()
@@ -28,6 +29,7 @@ def get_misspeller(name_misspelling_type):
             embedding_misspell = EmbeddingMisspell()
         ms = embedding_misspell
     return ms
+
 
 params = {
     "size": [100, 1000],
@@ -45,33 +47,30 @@ params = {
     "shuffle_columns": [False],
     "hide_identifier": [False],
     "identifier_coverage": [0.01, 0.10, 0.25],
-    "date_coverage": [0.90, 1.],
-    "name_coverage": [0.95, 1.],
-    "age_coverage": [0.8, 0.9, 1.],
+    "date_coverage": [0.90, 1.0],
+    "name_coverage": [0.95, 1.0],
+    "age_coverage": [0.8, 0.9, 1.0],
     "sex_format": ["lower_abbrv"],
-    "header": [(0,0)]
+    "header": [(0, 0)],
 }
 
-truth_params = {
-    "exp_linkage_rate": [0.30, 0.50, 0.70, 0.90, 1.]
-}
+truth_params = {"exp_linkage_rate": [0.30, 0.50, 0.70, 0.90, 1.0]}
 
 
 class SyntheticSampler(object):
-
     def __init__(self):
         self.data_path = os.path.join(MODELS_PATH, "linkage", "data", "raw")
 
     def _sample_params(self):
         params_ = {}
-        for k,v in params.items():
+        for k, v in params.items():
             params_[k] = random.choice(v)
         params_["misspeller"] = get_misspeller(params_["name_misspelling_type"])
         return params_
 
     def _sample_truth_params(self):
         params_ = {}
-        for k,v in truth_params.items():
+        for k, v in truth_params.items():
             params_[k] = random.choice(v)
         return params_
 
@@ -85,7 +84,9 @@ class SyntheticSampler(object):
         src_gen = NaiveReferenceTableGenerator(src_params)
         trg_gen = NaiveReferenceTableGenerator(trg_params)
         lt = ReferenceLinkedTables(src_gen, trg_gen)
-        ref_data = lt.sample(src_params["size"], trg_params["size"], truth_params["exp_linkage_rate"])
+        ref_data = lt.sample(
+            src_params["size"], trg_params["size"], truth_params["exp_linkage_rate"]
+        )
         # source file
         src_tf = TableTransformer(ref_data["src"])
         src_tf.transform(src_params)
@@ -104,7 +105,7 @@ class SyntheticSampler(object):
             "pairs": pairs,
             "src_params": src_params,
             "trg_params": trg_params,
-            "truth_params": truth_params
+            "truth_params": truth_params,
         }
         return results
 
@@ -115,7 +116,16 @@ class SyntheticSampler(object):
             res = self._sample()
             if res is None:
                 continue
-            save_results(self.data_path, identifier, res["src_data"], res["trg_data"], res["pairs"], res["src_params"], res["trg_params"], res["truth_params"])
+            save_results(
+                self.data_path,
+                identifier,
+                res["src_data"],
+                res["trg_data"],
+                res["pairs"],
+                res["src_params"],
+                res["trg_params"],
+                res["truth_params"],
+            )
             done += 1
 
     def load(self, identifier):
@@ -123,8 +133,4 @@ class SyntheticSampler(object):
         src = pd.read_csv(os.path.join(dir, "source.tsv"), delimiter="\t")
         trg = pd.read_csv(os.path.join(dir, "target.tsv"), delimiter="\t")
         truth = pd.read_csv(os.path.join(dir, "truth.tsv"), delimiter="\t")
-        return {
-            "src": src,
-            "trg": trg,
-            "truth": truth
-        }
+        return {"src": src, "trg": trg, "truth": truth}

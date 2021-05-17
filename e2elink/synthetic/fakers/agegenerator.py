@@ -3,7 +3,6 @@ import random
 
 
 class AgeGenerator(object):
-
     def __init__(self):
         pass
 
@@ -11,4 +10,4 @@ class AgeGenerator(object):
         years = int(np.random.normal(loc=loc, scale=scale))
         years = np.clip(years, 0, 120)
         days = random.randint(0, 365)
-        return {'years': years, 'days': days}
+        return {"years": years, "days": days}

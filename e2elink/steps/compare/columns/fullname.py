@@ -1,14 +1,19 @@
 import numpy as np
 
-from ..metrics.metrics import LevenshteinSimilarity, JaroWinklerSimilarity, MatchRatingApproach
+from ..metrics.metrics import (
+    LevenshteinSimilarity,
+    JaroWinklerSimilarity,
+    MatchRatingApproach,
+)
 
 
 class FullNameCompare(object):
-
     def __init__(self):
-        self.metrics = [LevenshteinSimilarity(),
-                        JaroWinklerSimilarity(),
-                        MatchRatingApproach()]
+        self.metrics = [
+            LevenshteinSimilarity(),
+            JaroWinklerSimilarity(),
+            MatchRatingApproach(),
+        ]
         self.prefix = "full_name"
         self.dim = len(self.metrics)
 
@@ -20,11 +25,8 @@ class FullNameCompare(object):
         for a, b in zip(data_a, data_b):
             c = []
             for metric in self.metrics:
-                c += [metric.calculate(a,b)]
+                c += [metric.calculate(a, b)]
             C += [c]
         C = np.array(C)
-        results = {
-            "C": C,
-            "columns": columns
-        }
+        results = {"C": C, "columns": columns}
         return results

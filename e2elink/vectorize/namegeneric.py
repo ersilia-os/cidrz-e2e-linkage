@@ -17,7 +17,6 @@ EMB_DIM = 128
 
 
 class NameGenericVectorizer(object):
-
     def __init__(self):
         self.emb_dim = EMB_DIM
         self.script_path = os.path.dirname(os.path.realpath(__file__))
@@ -28,14 +27,14 @@ class NameGenericVectorizer(object):
 
     def _prepare_data(self, N=100000, n=5):
         ngr = NameGeneratorRough()
-        ng  = NameGenerator()
-        sm  = SimpleMisspell()
-        ms  = MoeMisspell()
-        zm  = ZambiaMisspell()
+        ng = NameGenerator()
+        sm = SimpleMisspell()
+        ms = MoeMisspell()
+        zm = ZambiaMisspell()
         with open(self.data_path, "w", encoding="utf-8") as f:
             done = set()
             for _ in tqdm(range(0, N)):
-                x  = []
+                x = []
                 x += [ng.first_name(random=True)]
                 x += [ng.first_name(random=False)]
                 x += [ng.last_name(random=True)]
@@ -59,16 +58,18 @@ class NameGenericVectorizer(object):
                     a_ms = l_ms + r_ms
                     random.shuffle(a_ms)
                     if a_zm is None:
-                        a = a_ms[:len(l_ms)] + [x_] + a_ms[len(l_ms):]
+                        a = a_ms[: len(l_ms)] + [x_] + a_ms[len(l_ms) :]
                     else:
-                        a = a_ms[:len(l_ms)] + [x_] + a_zm + a_ms[len(l_ms):]
+                        a = a_ms[: len(l_ms)] + [x_] + a_zm + a_ms[len(l_ms) :]
                     f.write("%s\n" % " ".join(a))
                 done.update(x)
                 if len(done) > N:
                     break
 
     def fit(self, epoch=30):
-        mod = fasttext.train_unsupervised(self.data_path, dim=self.emb_dim, min_count=1, epoch=epoch)
+        mod = fasttext.train_unsupervised(
+            self.data_path, dim=self.emb_dim, min_count=1, epoch=epoch
+        )
         print("Words:", len(mod.words))
         print("Dim  :", mod.dim)
         print("Epoch:", mod.epoch)
@@ -78,7 +79,7 @@ class NameGenericVectorizer(object):
     def vectorize(self, words):
         V = np.zeros((len(words), self.emb_dim))
         for i, word in enumerate(words):
-            V[i,:] = self.mod.get_sentence_vector(word)
+            V[i, :] = self.mod.get_sentence_vector(word)
         return V
 
     def compare(self, word1, word2, metric="euclidean"):
