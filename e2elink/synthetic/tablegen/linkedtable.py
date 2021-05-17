@@ -26,6 +26,15 @@ class ReferenceLinkedTables(object):
 
 
 def find_ground_truth(src_uid, trg_uid):
+
+    all_uids = list(set(src_uid).union(trg_uid))
+    all_uids_idxs = {}
+    for i, uid in enumerate(all_uids):
+        all_uids_idxs[uid] = i
+
+    src_uid = [all_uids_idxs[uid] for uid in src_uid]
+    trg_uid = [all_uids_idxs[uid] for uid in trg_uid]
+
     pairs = []
     for src_idx, src_id in tqdm(enumerate(src_uid)):
         for trg_idx, trg_id in enumerate(trg_uid):

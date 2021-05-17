@@ -4,6 +4,7 @@
 data/
 models/
 development.ipynb
+development.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

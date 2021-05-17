@@ -35,7 +35,7 @@ class Defaults():
             "age_coverage": [90, 80, 100],
             "do_identifier": [False, True],
             "identifier_coverage": [10, 25, 50, 75, 90],
-            "sex_format": [0, 1, 2, 3]
+            "sex_format": [0, 1, 2, 3, 4]
         }
 
     def default(self):
@@ -224,6 +224,18 @@ src_age_coverage = st.sidebar.slider(
     95
 )/100
 
+# Sex
+st.sidebar.subheader("Sex")
+src_sex_as_binary = st.sidebar.checkbox(
+    "Binary variable",
+    value = False
+)
+# Random choices
+if not src_sex_as_binary:
+    src_sex_format = random.choice(["lower_abbrv", "upper_abbrv", "lower", "title"])
+else:
+    src_sex_format = "binary"
+
 # Other
 st.sidebar.subheader("Other")
 
@@ -243,9 +255,32 @@ else:
     src_identifier_coverage = 1.
     src_identifier_type = None
 
-# Random choices
-src_sex_format = random.choice(["lower_abbrv", "upper_abbrv", "lower", "title"])
+# Extra date
+src_extra_date = st.sidebar.checkbox(
+    'Add entry date',
+    value = False
+)
 
+# Clinical variable
+src_clinvar = st.sidebar.checkbox(
+    "Add clinical variable",
+    value = False
+)
+
+# Header
+
+src_header_type = st.sidebar.radio(
+   "Header type",
+   ["Random", "Standard", "Fixed"],
+   index = 0
+)
+
+if src_header_type == "Random":
+    src_header = (None, None)
+if src_header_type == "Standard":
+    src_header = (0, 0)
+if src_header_type == "Fixed":
+    src_header = (2, 1)
 
 # Target file
 
@@ -352,12 +387,14 @@ else:
         "shuffle_columns": False,
         "hide_identifier": not src_do_identifier,
         "identifier_coverage": src_identifier_coverage,
-        "rename_columns": None,
         "date_coverage": src_date_coverage,
         "name_coverage": src_name_coverage,
         "age_coverage": src_age_coverage,
         "date_coverage": src_date_coverage,
-        "sex_format": src_sex_format
+        "extra_date": src_extra_date,
+        "clinvar": src_clinvar,
+        "sex_format": src_sex_format,
+        "header": src_header
     }
     src_tf.transform(src_params)
     src_uid = src_tf.uid
@@ -382,12 +419,12 @@ else:
         "shuffle_columns": False,
         "hide_identifier": False,
         "identifier_coverage": 0.8,
-        "rename_columns": None,
         "date_coverage": src_date_coverage,
         "name_coverage": src_name_coverage,
         "age_coverage": src_age_coverage,
         "date_coverage": src_date_coverage,
-        "sex_format": "upper_abbrv"
+        "sex_format": "upper_abbrv",
+        "header": (0,0)
     }
     trg_tf.transform(trg_params)
     trg_uid = trg_tf.uid

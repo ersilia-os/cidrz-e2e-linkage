@@ -9,7 +9,6 @@ COLUMN_SYNONYMS = {
     ],
     "full_name": [
         "name",
-        "name",
         "full name",
         "client name",
         "client"
@@ -41,6 +40,16 @@ COLUMN_SYNONYMS = {
         "visit date",
         "date of visit",
         "date"
+    ],
+    "entry_date": [
+        "entry date",
+        "date of entry"
+    ],
+    "clinical_variable": [
+        "hiv",
+        "via",
+        "hiv status",
+        "via status"
     ]
 }
 
@@ -54,12 +63,18 @@ class ColumnSynonym(object):
     def style(self):
         return random.choice(self.cap_styles)
 
-    def rename(self, ref_col, cap_type=None):
-        col = random.choice(self.ref2syn[ref_col])
+    def rename(self, ref_col, cap_type=None, syn_option=None):
+        syn = self.ref2syn[ref_col]
+        if syn_option is None:
+            col = random.choice(self.ref2syn[ref_col])
+        else:
+            i = min(len(syn)-1, syn_option)
+            col = syn[i]
         if cap_type is None:
             cap_type = random.choice([0, 1, 2])
         else:
-            cap_type = self.cap_styles.index(cap_type)
+            if type(cap_type) is not int:
+                cap_type = self.cap_styles.index(cap_type)
         if cap_type == 0:
             col = col.lower()
         elif cap_type == 1:

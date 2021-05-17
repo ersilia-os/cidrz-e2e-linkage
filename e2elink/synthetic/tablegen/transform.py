@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import collections
+import datetime
 
 from ..schema.default import ColumnSynonym
 from ..misspell.simple import SimpleMisspell
@@ -14,8 +16,9 @@ class TableTransformer(object):
         self.data["birth_date_dt"] = pd.to_datetime(self.data["birth_date"])
         self.data["uid"] = list(self.data["identifier"])
 
-    def _select_idxs(self, rate):
-        n = self.data.shape[0]
+    def _select_idxs(self, rate, n=None):
+        if n is None:
+            n = self.data.shape[0]
         f = int(n*rate)
         idxs = [i for i in range(n)]
         return np.random.choice(idxs, f, replace=False)
@@ -51,10 +54,13 @@ class TableTransformer(object):
             self.data["visit_date"] = self.data["visit_date_dt"].dt.strftime(format)
             if "birth_date" in list(self.data.columns):
                 self.data["birth_date"] = self.data["birth_date_dt"].dt.strftime(format)
+            if "entry_date" in list(self.data.columns):
+                self.data["entry_date"] = self.data["entry_date_dt"].dt.strftime(format)
 
-    def _date_coverage(self, cov):
+    def _date_coverage(self, cov, col=None):
         idxs = self._select_idxs(1-cov)
-        col = "visit_date"
+        if col is None:
+            col = "visit_date"
         dates = self._column_as_list(col)
         for i in idxs:
             dates[i] = np.nan
@@ -92,11 +98,16 @@ class TableTransformer(object):
         self.data = self.data.drop(columns="identifier")
 
     def _identifier_coverage(self, cov):
-        idxs = self._select_idxs(1-cov)
         col = "identifier"
         ids = self._column_as_list(col)
+        ids_idxs = collections.defaultdict(list)
+        for i, id in enumerate(ids):
+            ids_idxs[id] += [i]
+        uids = [k for k,v in ids_idxs.items()]
+        idxs = self._select_idxs(1-cov, len(uids))
         for i in idxs:
-            ids[i] = np.nan
+            for j in ids_idxs[uids[i]]:
+                ids[j] = np.nan
         self.data[col] = ids
 
     def _misspell_full_name(self, rate, misspeller):
@@ -117,12 +128,13 @@ class TableTransformer(object):
             names[i] = " ".join(name)
         self.data["full_name"] = names
 
-    def _rename_columns(self):
+    def _rename_columns(self, cap_type=None, syn_option=None):
         cs = ColumnSynonym()
-        cap_type = cs.style()
+        if cap_type is None:
+            cap_type = cs.style()
         new_cols = {}
         for col in list(self.data.columns):
-            new_cols[col] = cs.rename(col, cap_type=cap_type)
+            new_cols[col] = cs.rename(col, cap_type=cap_type, syn_option=syn_option)
         self.data = self.data.rename(columns=new_cols)
 
     def _sex_format(self, format):
@@ -145,6 +157,14 @@ class TableTransformer(object):
                         sexs_ += ["Male"]
                     else:
                         sexs_ += ["Female"]
+                sexs = sexs_
+            if format == "binary":
+                sexs_ = []
+                for s in sexs:
+                    if s[0] == "m":
+                        sexs_ += [1]
+                    else:
+                        sexs_ += [0]
                 sexs = sexs_
             self.data["sex"] = sexs
 
@@ -187,7 +207,33 @@ class TableTransformer(object):
             names[i] = " ".join(name)
         self.data["full_name"] = names
 
+    def _extra_date(self):
+        format = "%Y-%m-%d"
+        dates = list(self.data["visit_date_dt"])
+        days = np.random.uniform(low=0, high=365, size=len(dates))
+        edates = []
+        for date, day in zip(dates, days):
+            edates += [date + datetime.timedelta(int(day))]
+        self.data["entry_date_dt"] = edates
+        self.data["entry_date"] = self.data["entry_date_dt"].dt.strftime(format)
+
+    def _clinical_variable(self):
+        do = np.random.choice([0,1])
+        n = self.data.shape[0]
+        if do == 0:
+            options = [0,1]
+        else:
+            options = ["Positive", "Negative"]
+        values = np.random.choice(options, n, replace=True)
+        self.data["clinical_variable"] = values
+
     def transform(self, params):
+
+        self._has_extra_date = False
+        if "extra_date" in params:
+            if params["extra_date"]:
+                self._extra_date()
+                self._has_extra_date = True
 
         if "sort_by_date" in params:
             if params["sort_by_date"]:
@@ -204,6 +250,8 @@ class TableTransformer(object):
 
         if "date_coverage" in params:
             self._date_coverage(params["date_coverage"])
+            if self._has_extra_date:
+                self._date_coverage(params["date_coverage"], "entry_date")
 
         if "identifier_coverage" in params:
             self._identifier_coverage(params["identifier_coverage"])
@@ -242,12 +290,16 @@ class TableTransformer(object):
         if "name_coverage" in params:
             self._full_name_coverage(params["name_coverage"])
 
+        if "clinvar" in params:
+            self._clinical_variable()
+
         self.uid = list(self.data["uid"])
-        self.data = self.data.drop(columns=["visit_date_dt", "birth_date_dt", "uid"])
+        cols2drop = list(set(["visit_date_dt", "birth_date_dt", "entry_date_dt", "uid"]).intersection(list(self.data.columns)))
+        self.data = self.data.drop(columns=cols2drop)
         self.data.fillna("", inplace=True)
 
-        if "rename_columns" in params:
-            self._rename_columns()
+        header = params["header"]
+        self._rename_columns(cap_type=header[0], syn_option=header[1])
 
     def reset(self):
         return TableTransformer(self.ref_data.copy())
