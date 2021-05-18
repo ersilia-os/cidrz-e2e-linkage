@@ -26,3 +26,7 @@ XXX
 
 ## 
 
+```text
+e2elink link data_a.tsv data_b.tsv > output.tsv
+```
+
