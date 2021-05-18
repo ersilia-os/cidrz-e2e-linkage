@@ -6,3 +6,23 @@ description: >-
 
 # Reference fields
 
+Most of the datasets that we encounter at CIDRZ contain only a limited number of linkage variables 
+
+## Identifier
+
+XXX
+
+## Full name
+
+XXX
+
+## Visit date
+
+XX
+
+## Birthdate
+
+XXX
+
+## 
+
