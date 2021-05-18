@@ -6,6 +6,10 @@
 
 * [Reference fields](concepts/reference-fields.md)
 
+---
+
+* [Synthetic data generation](synthetic.md)
+
 ## Steps
 
 * [Schema matching](steps/schema-matching.md)
@@ -13,5 +17,4 @@
 * [Blocking](steps/blocking.md)
 * [Comparisons](steps/comparisons.md)
 * [Scoring](steps/scoring.md)
-* [Synthetic data generation](steps/synthetic.md)
 
