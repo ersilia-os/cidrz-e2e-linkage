@@ -6,7 +6,7 @@ description: >-
 
 # Welcome to End-to-End linkage!
 
-This project is the result of a collaborative effort conducted at CIDRZ to perform end-to-end linkage in low resourced-settings.
+This project is the result of a collaborative effort conducted at CIDRZ to perform end-to-end linkage in low-resourced settings.
 
 ## Installation
 
