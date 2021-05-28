@@ -24,7 +24,11 @@ You can run a full linkage pipeline as follows:
 $ e2elink step all --src-file src.tsv --trg-file trg.tsv
 ```
 
-An output folder will be created. The most important file in this folder is the results file. Have a look:
+{% hint style="success" %}
+You are done! An output folder has l be created. 
+{% endhint %}
+
+The most important file in the output folder is the results file. You can have a look:
 
 ```bash
 $ head output/results.tsv
