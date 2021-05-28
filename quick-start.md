@@ -1,3 +1,7 @@
+---
+description: Medical record linkage is finally made easy. Get started!
+---
+
 # Quick start
 
 ## Prepare your data
@@ -70,9 +74,41 @@ This will create a preprocessed files with standard column names and cleaned dat
 
 #### 4. Blocking
 
+Blocking is a key step to ensure computational performance. By default, we block based on full names. For each row in the source file, we look for the nearest neighbors \(best candidates\) in the target file.
+
+```bash
+$ e2elink step block
+```
+
+A blocking index, specific to the target file, will be generated and stored as output. Please read more about blocking here:
+
+{% page-ref page="steps/blocking.md" %}
+
 #### 5. Comparison
+
+Comparisons are the fun part of record linkage. Each reference field is compared using one multiple similarity metrics to achieve the best possible fuzzy matches.
+
+```bash
+$ e2elink step compare
+```
+
+We have done a big effort to have a comprehensive and efficient set of comparisons for each linkage variable. Learn more here:
+
+{% page-ref page="steps/comparisons.md" %}
+
+{% hint style="info" %}
+We are always happy to include new types of comparisons. Please [reach out to us](https://github.com/ersilia-os/cidrz-e2e-linkage/issues) if you have suggestions!
+{% endhint %}
 
 #### 6. Scoring
 
+We provide a single linkage score based on the multiple comparisons. This score is based on pre-trained and calibrated models based on synthetic data. So it can be interpreted as a probability.
 
+```bash
+$ e2elink step score
+```
+
+Our scoring methodology is a unique component of this record linkage package. Please learn more here:
+
+{% page-ref page="steps/scoring.md" %}
 
