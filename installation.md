@@ -1,3 +1,7 @@
+---
+description: The e2elink is a python-based package. Installation should be straightforward.
+---
+
 # Installation
 
 ## Linux and MacOSX
