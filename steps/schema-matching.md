@@ -6,9 +6,17 @@ description: The first step of record linkage is recognizing the inputs.
 
 ## Introduction
 
+Schema matching refers to the mapping of columns in an input dataset to a set of standard columns that we will eventually use as linkage variables. For example, the full name of a person is sometimes referred to as _Client Name_, whereas sometimes it is specified in two fields, _Name_ and _Surname_.
 
+The task of the schema matching can be summarized as follows:
 
-## Linkage variables
+1. Get column names of the input file
+2. Read the content of the columns
+3. Map column names to standard fields based on column contents
+
+Mapping is done based on pre-trained text-based classifiers trained on a massive dataset of synthetic data.
+
+## Standard fields
 
 The majority of datasets that we encounter at CIDRZ contain only a limited number of linkage variables. We identify the following types of columns:
 
