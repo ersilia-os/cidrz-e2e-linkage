@@ -14,7 +14,7 @@ The task of the schema matching can be summarized as follows:
 2. Read the content of the columns
 3. Map column names to standard fields based on column contents
 
-Mapping is done based on pre-trained text-based classifiers trained on a massive dataset of synthetic data.
+Mapping is done based on pre-trained text-based classifiers built with a massive dataset of synthetic data. Pretrained models are downloaded automatically \(you can find them [here](http://example.com) too\). We used the fantastic [FastText](https://fasttext.cc/) tool to build the language-based models.
 
 ## Standard fields
 
