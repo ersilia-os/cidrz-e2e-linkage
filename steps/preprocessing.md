@@ -27,13 +27,20 @@ This project primarily works with data from a Zambian based Cervical Cancer prog
 * 
 ## Pre-processing Implementation
 
-The approach to the design and implementation has been to make the system not hard-coded to Cervical Cancer and SmartCare. In addition, the idea of pre-processing stage would be preceed by an automated step that determines the nature of the fields to be passed to the pre-processing step
+The approach to the design and implementation has been to make the system not hard-coded to Cervical Cancer and SmartCare. In addition, the idea of pre-processing stage would be preceeded by an automated step that determines the nature of the fields to be passed to the pre-processing step
 
-### References types
+The steps in pre-processing 
 
-Full name
+* Definiition of reference types
 
-Birth Year
+#### **References types**
+
+* Full name
+* Age
+* Birth year
+* Screening date
+* VIA
+* HIV result
 
 
 
