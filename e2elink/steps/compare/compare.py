@@ -1,4 +1,4 @@
-from .columns import get_compare
+from .columns import CompareGetter
 
 
 class Comparison(object):
@@ -16,9 +16,10 @@ class Comparison(object):
 
 class Compare(object):
     def __init__(self):
-        pass
+        self._compare_getter = CompareGetter()
 
     def compare(self, pairs, src, trg):
-        comp = get_compare(column)
+
+        comp = self._compare_getter.get(column)
 
         return Comparison(pairs, C, columns)
