@@ -4,7 +4,7 @@ description: >-
   linkage studies.
 ---
 
-# Synthetic data generation
+# Synthetic data
 
 ## Run app
 

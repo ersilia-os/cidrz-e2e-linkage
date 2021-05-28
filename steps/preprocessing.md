@@ -1,4 +1,4 @@
-# Data preprocessing
+# Preprocessing
 
 ## Background
 

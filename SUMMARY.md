@@ -2,20 +2,20 @@
 
 * [Welcome to End-to-End linkage!](README.md)
 * [Installation](installation.md)
-* [Quick start](quick-start-1.md)
+* [Quick start](quick-start.md)
 
 ## Concepts
 
-* [Linkage variables](concepts/reference-fields.md)
+* [Linkage variables](concepts/linkage-variables.md)
 
 ---
 
-* [Synthetic data generation](synthetic.md)
+* [Synthetic data](synthetic-data.md)
 
 ## Steps
 
 * [Schema matching](steps/schema-matching.md)
-* [Data preprocessing](steps/data-preprocessing.md)
+* [Preprocessing](steps/preprocessing.md)
 * [Blocking](steps/blocking.md)
 * [Comparisons](steps/comparisons.md)
 * [Scoring](steps/scoring.md)
