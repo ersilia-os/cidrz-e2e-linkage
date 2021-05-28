@@ -15,7 +15,11 @@ Then simply run:
 $ pip install e2elink
 ```
 
-You are done. A CLI command will be available to you.
+{% hint style="success" %}
+You are done!
+{% endhint %}
+
+A CLI command will be available to you.
 
 ```bash
 $ ersilia --help
