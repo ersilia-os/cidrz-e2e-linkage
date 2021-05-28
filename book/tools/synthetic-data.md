@@ -8,14 +8,11 @@ description: Simple generation of realistic synthetic datasets
 
 Synthetic data generation is key to record linkage because, most often, we have to deal with sensitive data, involving personally identifiable information, which hampers data sharing and collaboration.
 
-This tool produces synthetic that is very similar to the datasets that we have encountered in our experience with medical 
+This tool produces synthetic that is very similar to the datasets that we have encountered in our experience with medical
 
 * **Source file**: The main file of interest.
 * **Target file**: Typically, a large file containing. Source file entries are searched within this file.
 * **Linkage file**: Contains pairs of indices corresponding to source and target rows. This file can be considered to be the ground truth \(gold standard\).
-
-
-
 * Anonymize Personally Identifiable Information \(PII\)
 * Lack of gold standards
 * Small and large files

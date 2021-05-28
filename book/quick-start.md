@@ -25,7 +25,7 @@ $ e2elink step all --src-file src.tsv --trg-file trg.tsv
 ```
 
 {% hint style="success" %}
-You are done! An output folder has l be created. 
+You are done! An output folder has l be created.
 {% endhint %}
 
 The most important file in the output folder is the results file. You can have a look:
@@ -44,7 +44,7 @@ $ e2elink view results --folder output
 
 If you prefer to have full control over the linkage pipeline, you can run the code step by step.
 
-#### 1. Set up output directory
+### 1. Set up output directory
 
 First, you want to create an output directory where results will be stored.
 
@@ -52,7 +52,7 @@ First, you want to create an output directory where results will be stored.
 $ e2elink step setup --src-file src.tsv --trg-file trg.tsv
 ```
 
-#### 2. Schema matching
+### 2. Schema matching
 
 Check your input files and identify column types.
 
@@ -64,7 +64,7 @@ This will create a mapping file with the suggested correspondence between origin
 
 {% page-ref page="steps/schema-matching.md" %}
 
-#### 3. Data pre-processing
+### 3. Data pre-processing
 
 Once the schema of the input files has been identified, you need to preprocess the data.
 
@@ -76,7 +76,7 @@ This will create a preprocessed files with standard column names and cleaned dat
 
 {% page-ref page="steps/preprocessing.md" %}
 
-#### 4. Blocking
+### 4. Blocking
 
 Blocking is a key step to ensure computational performance. By default, we block based on full names. For each row in the source file, we look for the nearest neighbors \(best candidates\) in the target file.
 
@@ -88,7 +88,7 @@ A blocking index, specific to the target file, will be generated and stored as o
 
 {% page-ref page="steps/blocking.md" %}
 
-#### 5. Comparison
+### 5. Comparison
 
 Comparisons are the fun part of record linkage. Each reference field is compared using one multiple similarity metrics to achieve the best possible fuzzy matches.
 
@@ -104,7 +104,7 @@ We have done a big effort to have a comprehensive and efficient set of compariso
 We are always happy to include new types of comparisons. Please [reach out to us](https://github.com/ersilia-os/cidrz-e2e-linkage/issues) if you have suggestions!
 {% endhint %}
 
-#### 6. Scoring
+### 6. Scoring
 
 We provide a single linkage score based on the multiple comparisons. This score is based on pre-trained and calibrated models based on synthetic data. So it can be interpreted as a probability.
 

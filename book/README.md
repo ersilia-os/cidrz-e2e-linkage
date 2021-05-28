@@ -6,15 +6,10 @@ description: >-
 
 # Welcome to End-to-End linkage!
 
-## Meeting agenda 28/05/2021
+## Probabilistic record linkage made easy
 
-1. Summary of the approach
-   1. Synthetic-data oriented
-   2. Fully automated
-2. Repository
-3. Types of output
-4. Case examples
-5. Timeline
+## Features
 
-
+* Automated
+* Low-resource
 

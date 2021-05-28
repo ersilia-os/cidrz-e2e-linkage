@@ -8,7 +8,7 @@ description: The e2elink is a python-based package. Installation should be strai
 
 We recommend using a [conda](https://docs.conda.io/en/latest/miniconda.html) environment:
 
-```
+```text
 $ conda create -n e2elink python=3.7
 $ conda activate e2elink
 ```
