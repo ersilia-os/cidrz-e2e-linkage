@@ -6,5 +6,15 @@ description: >-
 
 # Welcome to End-to-End linkage!
 
-This project is the result of an effort conducted at CIDRZ to perform end-to-end linkage in low-resourced settings.
+## Meeting agenda 28/05/2021
+
+1. Summary of the approach
+   1. Synthetic-data oriented
+   2. Fully automated
+2. Repository
+3. Types of output
+4. Case examples
+5. Timeline
+
+
 
