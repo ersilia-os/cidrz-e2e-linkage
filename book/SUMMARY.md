@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Welcome to End-to-End linkage!](README.md)
+* [Welcome!](README.md)
 * [Installation](installation.md)
 * [Quick start](quick-start.md)
 
