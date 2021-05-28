@@ -4,14 +4,6 @@
 * [Installation](installation.md)
 * [Quick start](quick-start.md)
 
-## Method
-
-* [Linkage variables](method/linkage-variables.md)
-
----
-
-* [Synthetic data](synthetic-data.md)
-
 ## Steps
 
 * [Schema matching](steps/schema-matching.md)
@@ -19,6 +11,11 @@
 * [Blocking](steps/blocking.md)
 * [Comparisons](steps/comparisons.md)
 * [Scoring](steps/scoring.md)
+
+## Method
+
+* [Synthetic data](method/synthetic-data.md)
+* [Linkage variables](method/linkage-variables.md)
 
 ---
 
