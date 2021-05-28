@@ -6,20 +6,16 @@
 
 ## Steps
 
-* [Schema matching](steps/schema-matching.md)
+* [Schema matching](steps/schema-matching/README.md)
+  * [Linkage variables](steps/schema-matching/linkage-variables.md)
 * [Preprocessing](steps/preprocessing.md)
 * [Blocking](steps/blocking.md)
 * [Comparisons](steps/comparisons.md)
 * [Scoring](steps/scoring.md)
 
-## Method
+## Tools
 
-* [Synthetic data](method/synthetic-data.md)
-* [Linkage variables](method/linkage-variables.md)
-
----
-
-* [Untitled](untitled.md)
+* [Synthetic data](tools/synthetic-data.md)
 
 ## About
 
