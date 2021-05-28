@@ -6,8 +6,7 @@
 
 ## Steps
 
-* [Schema matching](steps/schema-matching/README.md)
-  * [Linkage variables](steps/schema-matching/linkage-variables.md)
+* [Schema matching](steps/schema-matching.md)
 * [Preprocessing](steps/preprocessing.md)
 * [Blocking](steps/blocking.md)
 * [Comparisons](steps/comparisons.md)

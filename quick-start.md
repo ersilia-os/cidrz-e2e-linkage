@@ -62,7 +62,7 @@ $ e2elink step schema
 
 This will create a mapping file with the suggested correspondence between original column names and standard column names. For more details, please see:
 
-{% page-ref page="steps/schema-matching/linkage-variables.md" %}
+{% page-ref page="steps/schema-matching.md" %}
 
 #### 3. Data pre-processing
 
