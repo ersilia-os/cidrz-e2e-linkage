@@ -1,14 +1,25 @@
 ---
 description: >-
   We deal with a limited number of fields that we typically encounter in CIDRZ
-  dataset
+  datasets
 ---
 
-# Reference fields
+# Linkage variables
 
-Most of the datasets that we encounter at CIDRZ contain only a limited number of linkage variables 
+The majority of datasets that we encounter at CIDRZ contain only a limited number of linkage variables. The 
 
-## Identifier
+## Reference fields
+
+Reference fields are 
+
+| Field | Description | Standard format |
+| :--- | :--- | :--- |
+| full\_name | First name and last name | john smith |
+| birth\_date | Date of birth | 1985-01-31 |
+| visit\_date | Date of data event, typically a visit to the clinic | 2020-12-31 |
+| identifier | Unique identifier for the patient |  |
+
+## Other fields
 
 XXX
 

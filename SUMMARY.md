@@ -1,10 +1,12 @@
 # Table of contents
 
 * [Welcome to End-to-End linkage!](README.md)
+* [Installation](installation.md)
+* [Quick start](quick-start-1.md)
 
 ## Concepts
 
-* [Reference fields](concepts/reference-fields.md)
+* [Linkage variables](concepts/reference-fields.md)
 
 ---
 
@@ -17,4 +19,8 @@
 * [Blocking](steps/blocking.md)
 * [Comparisons](steps/comparisons.md)
 * [Scoring](steps/scoring.md)
+
+---
+
+* [Untitled](untitled.md)
 
