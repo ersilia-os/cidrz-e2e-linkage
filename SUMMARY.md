@@ -21,3 +21,7 @@
 
 * [Untitled](untitled.md)
 
+## About
+
+* [Publications](about/publications.md)
+
