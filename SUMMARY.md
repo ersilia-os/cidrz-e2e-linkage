@@ -4,9 +4,9 @@
 * [Installation](installation.md)
 * [Quick start](quick-start.md)
 
-## Concepts
+## Method
 
-* [Linkage variables](concepts/linkage-variables.md)
+* [Linkage variables](method/linkage-variables.md)
 
 ---
 
