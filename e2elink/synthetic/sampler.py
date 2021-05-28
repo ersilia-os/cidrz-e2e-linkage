@@ -32,7 +32,7 @@ def get_misspeller(name_misspelling_type):
 
 
 params = {
-    "size": [100, 1000],
+    "size": [100, 1000, 10000],
     "dupl": [0.01, 0.10],
     "visits": [1, 1.5],
     "sort_by_date": [True],
