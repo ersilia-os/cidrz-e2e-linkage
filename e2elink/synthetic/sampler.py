@@ -4,6 +4,7 @@ import os
 import pandas as pd
 
 from .. import MODELS_PATH
+from .. import logger
 
 from .tablegen.singletable import NaiveReferenceTableGenerator
 from .tablegen.linkedtable import ReferenceLinkedTables, find_ground_truth
@@ -60,6 +61,7 @@ truth_params = {"exp_linkage_rate": [0.30, 0.50, 0.70, 0.90, 1.0]}
 class SyntheticSampler(object):
     def __init__(self):
         self.data_path = os.path.join(MODELS_PATH, "linkage", "data", "raw")
+        logger.info("Synthetic data will be stored at {0}".format(self.data_path))
 
     def _sample_params(self):
         params_ = {}
@@ -112,6 +114,7 @@ class SyntheticSampler(object):
     def sample(self, n):
         done = 0
         while done < n:
+            logger.debug("Sampled {0}/{0} synthetic datasets".format(done, n))
             identifier = str(uuid.uuid4())
             res = self._sample()
             if res is None:
@@ -127,10 +130,11 @@ class SyntheticSampler(object):
                 res["truth_params"],
             )
             done += 1
+        logger.success("Done. Find results at {0}".format(data_path))
 
     def load(self, identifier):
         dir = os.path.join(self.data_path, identifier)
-        src = pd.read_csv(os.path.join(dir, "source.tsv"), delimiter="\t")
-        trg = pd.read_csv(os.path.join(dir, "target.tsv"), delimiter="\t")
-        truth = pd.read_csv(os.path.join(dir, "truth.tsv"), delimiter="\t")
+        src = pd.read_csv(os.path.join(dir, "source.csv"), delimiter="\t")
+        trg = pd.read_csv(os.path.join(dir, "target.csv"), delimiter="\t")
+        truth = pd.read_csv(os.path.join(dir, "truth.csv"), delimiter="\t")
         return {"src": src, "trg": trg, "truth": truth}

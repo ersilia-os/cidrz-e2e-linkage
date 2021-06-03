@@ -5,7 +5,6 @@ import random
 from dateutil.relativedelta import relativedelta
 
 import hashlib
-from sdv.tabular import TVAE as Model
 
 from ..fakers.identifiergenerator import IdGeneratorDefault, ArtGenerator
 from ..fakers.dategenerator import DateGenerator
@@ -139,6 +138,7 @@ class NaiveReferenceTableGenerator(object):
         return df
 
 
+"""
 class ReferenceTableGenerator(object):
     def __init__(self, data, model_id=None):
         self.data = data
@@ -168,3 +168,4 @@ class ReferenceTableGenerator(object):
 
     def sample(self, n):
         return self.model.sample(n)
+"""

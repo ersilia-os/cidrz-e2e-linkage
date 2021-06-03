@@ -6,6 +6,9 @@ del _version
 # External imports
 import os
 
+# Internal imports
+from .utils.logging import logger
+
 # Check necessary data and models
 HOME = ".e2elink"
 if not os.path.exists(HOME):

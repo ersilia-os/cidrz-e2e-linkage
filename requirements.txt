@@ -1,3 +1,9 @@
 fuzzywuzzy
 Faker
 names
+loguru
+click
+# for synthetic data
+pandas
+#fasttext
+scipy
