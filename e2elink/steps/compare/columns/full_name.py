@@ -1,4 +1,4 @@
-from ..metrics.metrics import (
+from ....metrics.metrics import (
     ExactSimilarity,
     LevenshteinSimilarity,
     JaroWinklerSimilarity,
@@ -8,7 +8,7 @@ from ..metrics.metrics import (
     MongeElkanJaroWinklerSimilarity,
 )
 
-from ..columns.full_name import FullNameColumn
+from ....columns.full_name import FullNameColumn
 
 
 class FullNameMetrics(object):
@@ -19,7 +19,7 @@ class FullNameMetrics(object):
             JaroWinklerSimilarity(),
             MatchRatingApproach(),
             CosineSimilarity(),
-            MongeElkanLevenshteinSimilarity(),
-            MongeElkanJaroWinklerSimilarity(),
+            # MongeElkanLevenshteinSimilarity(),
+            # MongeElkanJaroWinklerSimilarity()
         ]
-        self.prefix = FullNameColum().label
+        self.prefix = FullNameColumn().label

@@ -1,6 +1,6 @@
-from ..metrics.metrics import ExactSimilarity
+from ....metrics.metrics import ExactSimilarity
 
-from ..columns.identifier import IdentifierColumn
+from ....columns.identifier import IdentifierColumn
 
 
 class IdentifierMetrics(object):

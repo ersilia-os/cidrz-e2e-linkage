@@ -47,6 +47,8 @@ setup(
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ),
     keywords="record-linkage machine-learning medical-informatics",
-    project_urls={"Source Code": "https://github.com/miquelduranfrigola/e2elink/",},
+    project_urls={
+        "Source Code": "https://github.com/miquelduranfrigola/e2elink/",
+    },
     include_package_data=True,
 )

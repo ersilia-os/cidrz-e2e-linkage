@@ -1,6 +1,6 @@
-from ..metrics.metrics import LevenshteinSimilarity, TimeDaysSimilarity
+from ....metrics.metrics import LevenshteinSimilarity, TimeDaysSimilarity
 
-from ..columns.visit_date import VisitDateColumn
+from ....columns.visit_date import VisitDateColumn
 
 
 class VisitDateMetrics(object):

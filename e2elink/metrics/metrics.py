@@ -67,6 +67,17 @@ class MongeElkanJaroWinklerSimilarity(object):
         return self.me.get_raw_score(a.split(" "), b.split(" "))
 
 
+class FirstCharacterSimilarity(object):
+    def __init__(self):
+        self.label = "fc"
+
+    def calculate(self, a, b):
+        if a[0] == b[0]:
+            return 1.0
+        else:
+            return 0.0
+
+
 class TimeDaysSimilarity(object):
     def __init__(self):
         self.label = "tds"

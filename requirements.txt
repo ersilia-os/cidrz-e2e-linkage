@@ -10,3 +10,5 @@ pandas
 #fasttext
 scipy
 python-Levenshtein
+textdistance
+py-stringmatching

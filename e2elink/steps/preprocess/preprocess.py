@@ -22,7 +22,9 @@ class Preprocess(object):
         logger.debug("Clean target file saved to {0}".format(self.trg_path))
 
     def load(self):
+        logger.debug("Loading clean source file from {0}".format(self.src_path))
         src_df = pd.read_csv(self.src_path)
+        logger.debug("Loading clean target file from {0}".format(self.trg_path))
         trg_df = pd.read_csv(self.trg_path)
         return Preprocess(src_df, trg_df)
 

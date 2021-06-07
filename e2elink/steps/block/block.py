@@ -11,7 +11,7 @@ from ..setup.setup import Session
 
 
 class Block(object):
-    def __init__(self, pairs, k):
+    def __init__(self, pairs=None, k=None):
         self.pairs = pairs
         self.k = k
         self.label = "k{0}".format(str(k).zfill(3))
@@ -29,7 +29,7 @@ class Block(object):
 
     def load(self):
         logger.debug("Reading blocking pairs from {0}".format(self.pairs_file))
-        pairs = pd.read_csv(slef.pairs_file)
+        pairs = pd.read_csv(self.pairs_file)
         logger.debug("Reading blocking parameters from {0}".format(self.params_file))
         with open(self.params_file, "r") as f:
             params = json.load(f)

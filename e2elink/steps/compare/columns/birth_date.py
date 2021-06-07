@@ -1,6 +1,6 @@
-from ..metrics.metrics import LevenshteinSimilarity, TimeDaysSimilarity
+from ....metrics.metrics import LevenshteinSimilarity, TimeDaysSimilarity
 
-from ..columns import BirthDateColumn
+from ....columns.birth_date import BirthDateColumn
 
 
 class BirthDateMetrics(object):

@@ -1,15 +1,19 @@
+import numpy as np
+
+from .identifier import IdentifierMetrics
 from .full_name import FullNameMetrics
+from .sex import SexMetrics
 from .birth_date import BirthDateMetrics
 from .visit_date import VisitDateMetrics
-from .identifier import IdentifierMetrics
 
 NULL = 0
 
 
-class Compare(object):
+class CompareChunk(object):
     def __init__(self, metrics):
+        metrics = metrics()
         self.metrics = metrics.metrics
-        self.prefix = metrics.label
+        self.prefix = metrics.prefix
 
     def compare(self, data_a, data_b):
         columns = []
@@ -26,8 +30,7 @@ class Compare(object):
                 c += [v]
             C += [c]
         C = np.array(C)
-        results = {"C": C, "columns": columns}
-        return results
+        return C, columns
 
 
 class CompareGetter(object):
@@ -36,14 +39,19 @@ class CompareGetter(object):
 
     @staticmethod
     def get(column):
+        if column == "identifier":
+            return CompareChunk(IdentifierMetrics)
+
         if column == "full_name":
-            return Compare(FullNameMetrics)
+            return CompareChunk(FullNameMetrics)
+
+        if column == "sex":
+            return CompareChunk(SexMetrics)
 
         if column == "birth_date":
-            return Compare(BirthDateMetrics)
+            return CompareChunk(BirthDateMetrics)
 
         if column == "visit_date":
-            return Compare(VisitDateMetrics)
+            return CompareChunk(VisitDateMetrics)
 
-        if column == "identifier":
-            return Compare(IdentifierMetrics)
+        print(column)
