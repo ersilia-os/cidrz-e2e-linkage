@@ -10,9 +10,7 @@ from ..fakers.identifiergenerator import IdGeneratorDefault, ArtGenerator
 from ..fakers.dategenerator import DateGenerator
 from ..fakers.agegenerator import AgeGenerator
 from ..fakers.namegenerator import NameGeneratorDefault, NameGenerator
-from ... import MODELS_PATH
-
-MODELS_PATH = "/Users/mduran/Desktop/test/"
+from ... import logger
 
 
 class NaiveReferenceTableGenerator(object):
@@ -64,18 +62,21 @@ class NaiveReferenceTableGenerator(object):
         random.shuffle(idxs)
         names = [names[i] for i in idxs]
         sexs = [sexs[i] for i in idxs]
+        logger.debug("Sampled names")
         return {"name": names, "sex": sexs}
 
     def _sample_dates(self, n):
         dates = [
             self.date_generator.sample(self.date_lb, self.date_ub) for _ in range(n)
         ]
+        logger.debug("Sampled dates")
         return dates
 
     def _sample_ages(self, n):
         loc = np.mean([self.age_lb, self.age_ub])
         scale = (self.age_ub - loc) / 1.96
         ages = [self.age_generator.sample(loc=loc, scale=scale) for _ in range(n)]
+        logger.debug("Sampled ages")
         return ages
 
     def _sample(self, n):
@@ -92,12 +93,14 @@ class NaiveReferenceTableGenerator(object):
         _date = self._sample_dates(n)
         visit_date = [d.strftime("%Y-%m-%d") for d in _date]
         # birth date
+        logger.debug("Dealing with birthdate")
         birth_date = []
         for d, a in zip(_date, _age):
             bd = d - relativedelta(years=a["years"], days=a["days"])
             birth_date += [bd.strftime("%Y-%m-%d")]
         birth_year = [d.split("-")[0] for d in birth_date]
 
+        logger.debug("Assembling dataframe")
         df = pd.DataFrame(
             {
                 "identifier": identifier,
@@ -125,9 +128,9 @@ class NaiveReferenceTableGenerator(object):
         df = self._sample(n_samp_v)
         idxs = [i for i in range(df.shape[0])]
         if n_vis > 0:
-            df_vis = df.iloc[np.random.choice(idxs, n_vis, replace=True)]
+            df_vis = df.iloc[np.random.choice(idxs, n_vis, replace=True)].copy()
             _date = self._sample_dates(n_vis)
-            df_vis["visit_date"] = [d.strftime("%Y-%m-%d") for d in _date]
+            df_vis.loc[:, "visit_date"] = [d.strftime("%Y-%m-%d") for d in _date]
             df = pd.concat([df, df_vis])
             df = df.sample(frac=1).reset_index(drop=True)
             idxs = [i for i in range(df.shape[0])]

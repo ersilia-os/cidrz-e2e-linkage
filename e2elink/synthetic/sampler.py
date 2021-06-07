@@ -114,8 +114,9 @@ class SyntheticSampler(object):
     def sample(self, n):
         done = 0
         while done < n:
-            logger.debug("Sampled {0}/{0} synthetic datasets".format(done, n))
+            logger.debug("Sampled {0}/{1} synthetic datasets".format(done, n))
             identifier = str(uuid.uuid4())
+            logger.debug("Folder {0}".format(identifier))
             res = self._sample()
             if res is None:
                 continue
@@ -130,7 +131,7 @@ class SyntheticSampler(object):
                 res["truth_params"],
             )
             done += 1
-        logger.success("Done. Find results at {0}".format(data_path))
+        logger.success("Done. Find results at {0}".format(self.data_path))
 
     def load(self, identifier):
         dir = os.path.join(self.data_path, identifier)

@@ -18,6 +18,9 @@ class Compare(object):
     def __init__(self):
         self._compare_getter = CompareGetter()
 
+    def _get_comparisons_columns(self):
+        pass
+
     def compare(self, pairs, src, trg):
 
         comp = self._compare_getter.get(column)

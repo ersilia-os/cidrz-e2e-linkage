@@ -4,16 +4,10 @@ import random
 COLUMN_SYNONYMS = {
     "identifier": ["client id", "number", "unique id"],
     "full_name": ["name", "full name", "client name", "client"],
-    "first_name": [
-        "first name",
-        "given name",
-    ],
+    "first_name": ["first name", "given name",],
     "last_name": ["family name", "surname", "last name"],
     "sex": ["gender"],
-    "birth_date": [
-        "date of birth",
-        "birthdate",
-    ],
+    "birth_date": ["date of birth", "birthdate",],
     "birth_year": ["year of birth", "birthyear"],
     "age": [],
     "visit_date": ["visit date", "date of visit", "date"],

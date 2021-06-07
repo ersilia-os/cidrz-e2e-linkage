@@ -5,9 +5,6 @@ from .. import echo
 
 
 def score_cmd():
-
-    @e2elink_cli.command(
-        help="TODO"
-    )
+    @e2elink_cli.command(help="TODO")
     def score():
         echo("TODO")

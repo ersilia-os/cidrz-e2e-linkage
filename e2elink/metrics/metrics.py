@@ -1,6 +1,7 @@
 from fuzzywuzzy import fuzz
 import textdistance
 import py_stringmatching as str_match
+from datetime import date
 
 
 class ExactSimilarity(object):
@@ -9,9 +10,9 @@ class ExactSimilarity(object):
 
     def calculate(self, a, b):
         if a == b:
-            return 1.
+            return 1.0
         else:
-            return 0.
+            return 0.0
 
 
 class LevenshteinSimilarity(object):
@@ -64,3 +65,12 @@ class MongeElkanJaroWinklerSimilarity(object):
 
     def calculate(self, a, b):
         return self.me.get_raw_score(a.split(" "), b.split(" "))
+
+
+class TimeDaysSimilarity(object):
+    def __init__(self):
+        self.label = "tds"
+
+    def calculate(self, a, b):
+        diff = abs((date(a) - date(b)).days)
+        return 1 / (1 + diff)

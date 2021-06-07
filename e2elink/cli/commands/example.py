@@ -6,11 +6,8 @@ from ...synthetic.sampler import SyntheticSampler
 
 
 def example_cmd():
-
-    @e2elink_cli.command(
-        help="Sample datasets."
-    )
-    @click.option("--number", "-n", type=click.INT)
+    @e2elink_cli.command(help="Sample datasets.")
+    @click.option("--number", "-n", default=1, type=click.INT)
     def example(number):
         echo("Sampling data")
         samp = SyntheticSampler()

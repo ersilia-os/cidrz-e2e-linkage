@@ -3,7 +3,10 @@ Faker
 names
 loguru
 click
+joblib
+sklearn
 # for synthetic data
 pandas
 #fasttext
 scipy
+python-Levenshtein

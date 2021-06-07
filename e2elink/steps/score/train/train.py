@@ -1,14 +1,16 @@
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.calibration import CalibratedClassifierCV
 
 MAX_N = 10000
 
 
 class Model(object):
     def __init__(self):
-        self.clf = RandomForestClassifier(class_weight="balanced", n_jobs=-1)
+        self.base_clf = RandomForestClassifier(class_weight="balanced", n_jobs=-1)
+        self.clf = CalibratedClassifierCV(self.base_clf)
 
     @staticmethod
-    def _get_y_from_truth(comparisons, truth)
+    def _get_y_from_truth(comparisons, truth):
         pairs = comparisons.pairs
         truth_set = set([(x[0], x[1]) for x in truth])
         y = np.zeros((len(pairs),), dtype=np.int)
@@ -30,7 +32,7 @@ class Model(object):
         if comparisons.columns != self.columns.comparisons:
             return None
         X = comparisons.C
-        y = self.clf.predict_proba(X)
+        y = self.clf.predict_proba(X)[:, 1]
         return y
 
     def save(self):
