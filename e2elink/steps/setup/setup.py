@@ -20,9 +20,13 @@ class Session(object):
 
 
 class PipelineSetup(object):
-    def __init__(self, src_file, trg_file, output_dir):
+    def __init__(self, src_file, trg_file, truth_file, output_dir):
         self.src_file = os.path.abspath(src_file)
         self.trg_file = os.path.abspath(trg_file)
+        if truth_file is not None:
+            self.truth_file = os.path.abspath(truth_file)
+        else:
+            self.truth_file = None
         self.output_dir = os.path.abspath(output_dir)
         if os.path.exists(self.output_dir):
             logger.error("Output folder {0} exists!".format(self.output_dir))
@@ -50,6 +54,8 @@ class PipelineSetup(object):
         self._make_subdir("score")
         shutil.copyfile(self.src_file, os.path.join(self.output_dir, "raw", "src.csv"))
         shutil.copyfile(self.trg_file, os.path.join(self.output_dir, "raw", "trg.csv"))
+        if self.truth_file is not None:
+            shutil.copyfile(self.truth_file, os.path.join(self.output_dir, "raw", "truth.csv"))
         logger.info("Created output folder structure at {0}".format(self.output_dir))
 
     def setup(self):

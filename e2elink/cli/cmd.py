@@ -36,3 +36,8 @@ class Command(object):
         from .commands.score import score_cmd
 
         score_cmd()
+
+    def finish(self):
+        from .commands.finish import finish_cmd
+
+        finish_cmd()

@@ -10,4 +10,4 @@ def preprocess_cmd():
         echo("Preprocessing")
         prep = Preprocessor().clean()
         prep.save()
-        echo("Done")
+        echo("Done", fg="green")
