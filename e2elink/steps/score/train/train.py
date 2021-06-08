@@ -1,50 +1,67 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.calibration import CalibratedClassifierCV
 
+from .... import logger
+from ...setup.setup import Session
+from ...compare.compare import Comparison
+from ...block.block import Block
+
+
 MAX_N = 10000
 
 
-class Model(object):
+class _Model(object):
     def __init__(self):
-        self.base_clf = RandomForestClassifier(class_weight="balanced", n_jobs=-1)
-        self.clf = CalibratedClassifierCV(self.base_clf)
+        self.base_mdl = RandomForestClassifier(class_weight="balanced", n_jobs=-1)
+        self.mdl = CalibratedClassifierCV(self.base_clf)
 
-    @staticmethod
-    def _get_y_from_truth(comparisons, truth):
-        pairs = comparisons.pairs
-        truth_set = set([(x[0], x[1]) for x in truth])
-        y = np.zeros((len(pairs),), dtype=np.int)
-        for i, p in enumerate(pairs):
-            if p in truth_set:
-                y[i] = 1
-        return y
-
-    def fit(self, comparisons, truth):
-        X = comparisons.C
-        y = truth
+    def fit(self, X, y):
         idxs = [i for i in range(len(y))]
         idxs = idxs.shuffle()
         idxs = idxs[:MAX_N]
-        self.clf.fit(X[idxs], y[idxs])
-        self.columns = comparisons.columns
+        self.mdl.fit(X[idxs], y[idxs])
 
-    def predict(self, comparisons):
-        if comparisons.columns != self.columns.comparisons:
-            return None
-        X = comparisons.C
-        y = self.clf.predict_proba(X)[:, 1]
-        return y
+
+class Model(object):
+
+    def __init__(self, mdl=None):
+        self.mdl = mdl
+        self.path = os.path.join(Session().get_output_path(), "score")
+        self.mdl_path = os.path.join(self.path, "mdl.pkl")
 
     def save(self):
-        pass
+        joblib.dump(self.mdl, self.mdl_path)
+        logger.debug("Model saved to {0}".format(self.mdl_path))
 
     def load(self):
-        pass
+        logger.debug("Loading model from {0}".format(self.mdl_path))
+        mdl = joblib.load(self.mdl_path)
 
 
-class LinkageModelTrainer(object):
-    def __init__(self, identifier):
-        pass
+class _ModelTrainer(object):
 
-    def foo(self):
-        pass
+    def __init__(self):
+        self.mdl = _Model()
+
+    def fit(self, C, y):
+        self.mdl.fit(C, y)
+        return self.mdl
+
+
+class ModelTrainer(object):
+
+    def __init__(self):
+        y_path = os.path.join(Session().get_output_path(), "block", "y.npy")
+        if os.path.exists(y_path):
+            self.C = Comparison().load().C
+            self.y = Block().load().y
+            self.trainer = _ModelTrainer()
+        else:
+            self.trainer = None
+
+    def fit(self):
+        if self.trainer is None:
+            return None
+        logger.debug("Training model")
+        mdl = self.trainer.fit(self.C, self.y)
+        return Model(mdl)

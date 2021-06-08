@@ -3,12 +3,14 @@ import json
 import numpy as np
 
 from ... import logger
+from .train.train import ModelTrainer
+from .ensemble.ensemble import ModelEnsembler
 from ..setup.setup import Session
 from ..compare.compare import Comparison
 
 
 class Score(object):
-    def __init__(self, score):
+    def __init__(self, score=None):
         self.score = score
         self.path = os.path.join(Session().get_output_path(), "score")
         self.score_path = os.path.join(self.path, "score.npy")
@@ -26,11 +28,17 @@ class Score(object):
 
 
 class _Scorer(object):
-    def __init__(self):
-        pass
+    def __init__(self, ensembler):
+        self.ensembler = ensembler
 
     def _score(self, C):
-        sc = np.sum(C, axis=1)
+        P = []
+        W = []
+        for mdl, w in ensembler.items():
+            P += [mdl.predict(C)]
+            W += [w]
+        P = np.array(P).T
+        sc = np.average(P, axis=1, weights=weights)
         return sc
 
     def score(self, C):
@@ -41,7 +49,14 @@ class _Scorer(object):
 class Scorer(object):
     def __init__(self):
         self.C = Comparison().load().C
-        self.scorer = _Scorer()
+        self._fit_if_available()
+        self.ensembler = ModelEnsembler()
+        self.scorer = _Scorer(self.ensembler)
+
+    def _fit_if_available(self):
+        mdl = ModelTrainer().fit()
+        if mdl is not None:
+            mdl.save()
 
     def score(self):
         sc = self.scorer.score(self.C)

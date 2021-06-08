@@ -5,7 +5,50 @@ from svd import evaluation
 import joblib
 from .. import MODELS_PATH
 
+from .... import logger
+from ...setup.setup import Session
+
+
 MAX_N = 10000
+
+
+class Predictor(object):
+
+    def __init__(self, mdl):
+        self.mdl = mdl
+
+    def predict(self, X):
+        return self.mdl.predict_proba(X)[:, 1]
+
+
+class ModelEnsembler(object):
+
+    def __init__(self):
+        this_mdl_path = os.path.join(Session().get_output_path(), "score", "mdl.pkl")
+        if os.path.exists(this_mdl_path):
+            logger.debug("Model exists for this dataset")
+            self.mdl_paths = [mdl_path]
+            self.weights = [1.]
+            self.has_mdl = True
+        else:
+            logger.debug("Model does not exist for this dataset")
+            self.mdl_paths = []
+            self.weights = []
+            self.has_mdl = False
+        self._scan_pretrained_models()
+
+    def _scan_pretrained_models(self):
+        # TODO: Based on pretrained models
+        pass
+
+    def _load_model(self, mdl_path):
+        return joblib.load(mdl_path)
+
+    def items(self):
+        for mdl_path, w in zip(self.mdl_paths, self.weights):
+            mdl = self._load_model(mdl_path)
+            prd = Predictor(mdl)
+            yield prd, w
 
 
 class ModelSampler(object):

@@ -77,7 +77,7 @@ class _Blocker(object):
                 else:
                     y[i] = 0
         else:
-            logger.debug("No truth available. y = None")
+            logger.debug("No truth available: y is None")
             y = None
         return y
 
