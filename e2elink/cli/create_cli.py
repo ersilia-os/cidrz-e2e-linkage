@@ -14,6 +14,7 @@ def create_cli():
     cmd.block()
     cmd.compare()
     cmd.score()
+    cmd.evaluate()
     cmd.finish()
 
     return e2elink_cli

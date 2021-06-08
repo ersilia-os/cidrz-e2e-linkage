@@ -37,6 +37,11 @@ class Command(object):
 
         score_cmd()
 
+    def evaluate(self):
+        from .commands.evaluate import evaluate_cmd
+
+        evaluate_cmd()
+
     def finish(self):
         from .commands.finish import finish_cmd
 

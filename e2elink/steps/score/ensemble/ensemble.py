@@ -1,9 +1,5 @@
 import os
-import pandas as pd
-import numpy as np
-from svd import evaluation
 import joblib
-from .. import MODELS_PATH
 
 from .... import logger
 from ...setup.setup import Session
@@ -27,7 +23,7 @@ class ModelEnsembler(object):
         this_mdl_path = os.path.join(Session().get_output_path(), "score", "mdl.pkl")
         if os.path.exists(this_mdl_path):
             logger.debug("Model exists for this dataset")
-            self.mdl_paths = [mdl_path]
+            self.mdl_paths = [this_mdl_path]
             self.weights = [1.]
             self.has_mdl = True
         else:
@@ -51,6 +47,7 @@ class ModelEnsembler(object):
             yield prd, w
 
 
+"""
 class ModelSampler(object):
     def __init__(self, data):
         if data.shape[0] > MAX_N:
@@ -90,7 +87,7 @@ class ModelSampler(object):
         return scores
 
     def sample(self, n):
-        """Return top n samples"""
         scores = self.score_samples()[:n]
         for identifier, score in scores:
             yield self._load_model(identifier), score
+    """

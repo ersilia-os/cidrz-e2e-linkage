@@ -52,6 +52,7 @@ class PipelineSetup(object):
         self._make_subdir("block")
         self._make_subdir("compare")
         self._make_subdir("score")
+        self._make_subdir("evaluate")
         shutil.copyfile(self.src_file, os.path.join(self.output_dir, "raw", "src.csv"))
         shutil.copyfile(self.trg_file, os.path.join(self.output_dir, "raw", "trg.csv"))
         if self.truth_file is not None:

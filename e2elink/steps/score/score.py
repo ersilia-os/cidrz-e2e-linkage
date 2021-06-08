@@ -21,7 +21,7 @@ class Score(object):
             np.save(f, self.score, allow_pickle=False)
 
     def load(self):
-        with open(self.score_path, "r") as f:
+        with open(self.score_path, "rb") as f:
             score = np.load(f)
         logger.debug("Loading scores from {0}".format(self.score_path))
         return Score(score)
@@ -34,11 +34,11 @@ class _Scorer(object):
     def _score(self, C):
         P = []
         W = []
-        for mdl, w in ensembler.items():
+        for mdl, w in self.ensembler.items():
             P += [mdl.predict(C)]
             W += [w]
         P = np.array(P).T
-        sc = np.average(P, axis=1, weights=weights)
+        sc = np.average(P, axis=1, weights=W)
         return sc
 
     def score(self, C):
