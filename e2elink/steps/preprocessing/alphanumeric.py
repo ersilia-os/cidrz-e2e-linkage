@@ -1,0 +1,2 @@
+class Alphanumeric:
+    pass
