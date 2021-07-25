@@ -3,7 +3,7 @@ import numpy as np
 def merge_columns(dataframe, final_col_name, cols_to_merge=[], separator=' '):
     dataframe[final_col_name] = np.nan
 
-    # TODO -fix middlename that has nan, actually names that have nan:w
+    # TODO -fix middlename that has nan, actually names that have nan
     for id, columns in dataframe.iterrows():
         tmpfullname = ''
         separator_char = ''

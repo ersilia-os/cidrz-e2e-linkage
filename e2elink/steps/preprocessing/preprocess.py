@@ -14,6 +14,7 @@ class Preprocess:
     def clean(self):
         clean_output_fields = {}
         print(self.reference_fields)
+
         for reference_field in self.reference_fields:
             clean_col_field, self.dataframe = reference_field.clean(self.dataframe)
             clean_output_fields[reference_field.label] = clean_col_field

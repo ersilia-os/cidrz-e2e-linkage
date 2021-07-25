@@ -4,13 +4,15 @@ from ..preprocessing import preprocess, age, full_name, \
     birth_year, date_field, pp_utils
 
 
-class RawDatasetHandler:
+class Preprocessor:
     def __init__(self, sourcefile):
         self.__source_file = sourcefile
         self.__field_holder = []
         self.__is_clean = False
         self.clean_columns = []
         self.__dataset = None
+        self.__is_dataset_cleaned = False
+        self.__raw_dataset = None
 
     def clean(self):
         if not self.__is_clean:
@@ -19,8 +21,9 @@ class RawDatasetHandler:
             if self.__field_holder:
                 pprocess = preprocess.Preprocess(self.__dataset, self.__field_holder)
                 self.clean_columns, self.__dataset = pprocess.clean()
+                self.__is_dataset_cleaned = True
             else:
-                raise Exception('not variables were defined for cleaning')
+                raise Exception('no variables were defined for cleaning')
 
     def set_age(self, age_column):
         self.__field_holder.append(age.Age(age_column))
@@ -38,20 +41,26 @@ class RawDatasetHandler:
         return self.__field_holder
 
     def get_cleaned_dataset(self):
-        return self.__dataset
+        if self.__is_dataset_cleaned:
+            return self.__dataset
+        return None
 
     def get_cleaned_column_names(self):
-        return self.clean_columns
+        if self.__is_dataset_cleaned:
+            return self.clean_columns
+        return []
 
     def __load_raw_dataframe(self):
-        return pd.read_csv(self.__source_file)
-
+        if not self.__raw_dataset:
+             self.__raw_dataset = pd.read_csv(self.__source_file)
+        return self.__raw_dataset
 
 def test(filepath):
+
     sourcepath1 = filepath
     sourcepath2 = 'some path to anther file'
 
-    source1 = RawDatasetHandler(sourcepath1)
+    source1 = Preprocessor(sourcepath1)
     source1.set_age('age_birth_year')
     source1.set_birth_year('age_birth_year')
     source1.set_fullname('name', 'enrol_date')
@@ -62,7 +71,7 @@ def test(filepath):
     # source2.set_fullname('patient_fullname')
     # source2.clean_dataset()
 
-    cleaned_source1 = source1.get_cleaned_dataset()
+    cleaned_source1 = source1.get_cleaned_dataset
     clean_cols_source1 = source1.get_cleaned_column_names()
     # blocks = block.get_matching_blocks(cleaned_source1, cleaned_source2)
 
