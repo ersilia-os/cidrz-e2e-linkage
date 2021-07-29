@@ -1,5 +1,5 @@
 ---
-description: The e2elink is a python-based package. Installation should be straightforward.
+description: The e2elink is a Python package. Installation should be straightforward.
 ---
 
 # Installation
