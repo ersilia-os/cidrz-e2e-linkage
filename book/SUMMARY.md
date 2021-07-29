@@ -3,6 +3,7 @@
 * [Welcome!](README.md)
 * [Installation](installation.md)
 * [Quick start](quick-start.md)
+* [Methods](methods.md)
 
 ## Steps
 
@@ -19,8 +20,4 @@
 ## About
 
 * [Publications](about/publications.md)
-
----
-
-* [Methods](methods.md)
 
