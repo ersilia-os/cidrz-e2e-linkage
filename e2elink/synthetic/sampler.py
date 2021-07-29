@@ -59,8 +59,11 @@ truth_params = {"exp_linkage_rate": [0.30, 0.50, 0.70, 0.90, 1.0]}
 
 
 class SyntheticSampler(object):
-    def __init__(self):
-        self.data_path = os.path.join(MODELS_PATH, "linkage", "data", "raw")
+    def __init__(self, data_path=None):
+        if data_path is None:
+            self.data_path = os.path.join(MODELS_PATH, "linkage", "data", "raw")
+        else:
+            self.data_path = os.path.abspath(data_path)
         logger.info("Synthetic data will be stored at {0}".format(self.data_path))
 
     def _sample_params(self):
@@ -131,7 +134,7 @@ class SyntheticSampler(object):
                 res["truth_params"],
             )
             done += 1
-        logger.success("Done. Find results at {0}".format(self.data_path))
+        logger.success("Done. Find results at {0}/{1}".format(self.data_path, identifier))
 
     def load(self, identifier):
         dir = os.path.join(self.data_path, identifier)

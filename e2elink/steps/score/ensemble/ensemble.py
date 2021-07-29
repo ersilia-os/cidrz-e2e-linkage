@@ -1,8 +1,12 @@
 import os
 import joblib
 
+import numpy as np
+import scipy.stats
+
 from .... import logger
 from ...setup.setup import Session
+from ....vars import MODELS_PATH
 
 
 MAX_N = 10000
@@ -17,10 +21,27 @@ class Predictor(object):
         return self.mdl.predict_proba(X)[:, 1]
 
 
+class DistributionDistances(object):
+
+    def __init__(self, p, q):
+        self.p = np.array(p)
+        self.q = np.array(q)
+
+    def jensen_shannon_distance(self):
+        p = self.p
+        q = self.q
+        m = (p + q) / 2
+        divergence = (scipy.stats.entropy(p, m) + scipy.stats.entropy(q, m)) / 2
+        distance = np.sqrt(divergence)
+        return distance
+
+
 class ModelEnsembler(object):
 
     def __init__(self):
-        this_mdl_path = os.path.join(Session().get_output_path(), "score", "mdl.pkl")
+        self.output_path = Session().get_output_path()
+        self.tags_path = os.path.join(MODELS_PATH, "linkage", "results")
+        this_mdl_path = os.path.join(self.output_path, "score", "mdl.pkl")
         if os.path.exists(this_mdl_path):
             logger.debug("Model exists for this dataset")
             self.mdl_paths = [this_mdl_path]
@@ -33,7 +54,34 @@ class ModelEnsembler(object):
             self.has_mdl = False
         self._scan_pretrained_models()
 
+    def _read_columns(self, path):
+        with open(os.path.join(path, "compare", "columns.json"), "r") as f:
+            columns = json.load(f)
+        return columns
+
+    def _read_C(self, path):
+        with open(os.path.join(path, "compare", "C.npy"), "rb") as f:
+            C = np.load(f)
+        return C
+
+    def _find_pretrained_models_with_same_columns(self):
+        columns = self._read_columns(self.output_path)
+        for tag in os.listdir(self.tags_path):
+            if len(tag) != 36:
+                continue
+            pretrained_columns = self._read_columns(os.path.join(self.tags_path, tag))
+            if columns != pretrained_columns:
+                continue
+            yield tag
+
+    def _measure_C_coincidence(self, C_0, C_1):
+        pass
+
     def _scan_pretrained_models(self):
+        C_0 = self._read_C(self.output_path)
+        for tag in self._find_pretrained_models_with_same_columns():
+            C_1 = self._read_C(os.path.join(self.tags_path, tag))
+            coincidence = self._measure_C_coincidence(C_0, C_1)
         # TODO: Based on pretrained models
         pass
 
@@ -45,49 +93,3 @@ class ModelEnsembler(object):
             mdl = self._load_model(mdl_path)
             prd = Predictor(mdl)
             yield prd, w
-
-
-"""
-class ModelSampler(object):
-    def __init__(self, data):
-        if data.shape[0] > MAX_N:
-            self.data = data.sample(n=MAX_N)
-        else:
-            self.data = data.sample(n=data.shape[0])
-        self.models_path = os.path.join(MODELS_PATH, "linkage")
-        self.checkpoints_path = os.path.join(self.models_path, "checkpoints")
-        self.data_path = os.path.join(self.models_path, "data", "comparisons")
-
-    def _load_data(self, identifier):
-        df = pd.read_csv(
-            os.path.join(self.data_path, identifier + ".tsv"), delimiter="\t"
-        )
-        if df.shape[0] > self.data.shape[0]:
-            df = df.sample(n=self.data.shape[0])
-        else:
-            df = df.sample(n=self.df.shape[0])
-        return df
-
-    def _load_model(self, identifier):
-        mdl = joblib.load(os.path.join(self.checkpoints_path, identifier + ".pkl"))
-        return mdl
-
-    def score_samples(self):
-        scores = {}
-        for fn in os.path.listdir(self.data_path):
-            identifier = fn.split(".")[0]
-            df = self._load_data(identifier)
-            if df.shape[0] > self.data.shape[0]:
-                data = self.data.sample(n=df.shape[0])
-            else:
-                data = self.data
-            score = evaluation(data, df)
-            scores[identifier] = score
-        scores = sorted(scores.items(), key=lambda item: -item[1])
-        return scores
-
-    def sample(self, n):
-        scores = self.score_samples()[:n]
-        for identifier, score in scores:
-            yield self._load_model(identifier), score
-    """
