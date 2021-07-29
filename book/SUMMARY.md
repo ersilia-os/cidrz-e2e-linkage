@@ -20,3 +20,7 @@
 
 * [Publications](about/publications.md)
 
+---
+
+* [Methods](methods.md)
+
