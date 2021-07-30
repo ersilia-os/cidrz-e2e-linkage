@@ -10,21 +10,29 @@ from ..compare.compare import Comparison
 
 
 class Score(object):
-    def __init__(self, score=None):
+    def __init__(self, score=None, meta=None):
         self.score = score
+        self.meta = meta
         self.path = os.path.join(Session().get_output_path(), "score")
         self.score_path = os.path.join(self.path, "score.npy")
+        self.meta_path = os.path.join(self.path, "meta.json")
 
     def save(self):
         logger.debug("Scores saved to {0}".format(self.score_path))
         with open(self.score_path, "wb") as f:
             np.save(f, self.score, allow_pickle=False)
+        logger.debug("Metadata saved to {0}".format(self.meta_path))
+        with open(self.meta_path, "w") as f:
+            json.dump(self.meta, f, indent=4)
 
     def load(self):
         with open(self.score_path, "rb") as f:
             score = np.load(f)
         logger.debug("Loading scores from {0}".format(self.score_path))
-        return Score(score)
+        with open(self.meta_path, "r") as f:
+            meta = json.load(f)
+        logger.debug("Loading metadata from {0}".format(self.meta_path))
+        return Score(score, meta)
 
 
 class _Scorer(object):
@@ -34,16 +42,29 @@ class _Scorer(object):
     def _score(self, C):
         P = []
         W = []
-        for mdl, w in self.ensembler.items():
+        CV = []
+        T = []
+        for item in self.ensembler.items():
+            tag = item["tag"]
+            mdl = item["predictor"]
+            w = item["weight"]
+            cv = item["cv_results"]
             P += [mdl.predict(C)]
             W += [w]
+            CV += [cv]
+            T += [tag]
         P = np.array(P).T
         sc = np.average(P, axis=1, weights=W)
-        return sc
+        meta = {
+            "tags": T,
+            "cv_results": CV,
+            "weights": W
+        }
+        return sc, meta
 
     def score(self, C):
-        sc = self._score(C)
-        return sc
+        sc, meta = self._score(C)
+        return sc, meta
 
 
 class Scorer(object):
@@ -59,5 +80,5 @@ class Scorer(object):
             mdl.save()
 
     def score(self):
-        sc = self.scorer.score(self.C)
-        return Score(sc)
+        sc, meta = self.scorer.score(self.C)
+        return Score(sc, meta)
