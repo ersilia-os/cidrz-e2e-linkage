@@ -2,6 +2,7 @@ import os
 import numpy as np
 import json
 import pandas as pd
+import collections
 from sklearn.metrics import roc_curve, auc, f1_score, precision_score, recall_score
 
 from ... import logger
@@ -79,6 +80,25 @@ class _Evaluator(object):
         return res
 
 
+class _MetaEvaluator(object):
+
+    def __init__(self):
+        self.meta_path = os.path.join(Session().get_output_path(), "score", "meta.json")
+
+    def evaluate(self):
+        logger.debug("Estimating performance from synthetic datasets {0}".format(self.meta_path))
+        with open(self.meta_path, "r") as f:
+            meta = json.load(f)
+        cv_results = meta["cv_results"]
+        weights = meta["weights"]
+        values = collections.defaultdict(list)
+        for d in cv_results:
+            for k,v in d.items():
+                values[k] += [v]
+        res = dict((k, np.average(v, weights=weights)) for k,v in values.items())
+        return res
+
+
 class Evaluator(object):
 
     def __init__(self):
@@ -86,6 +106,7 @@ class Evaluator(object):
         self.pairs = [(r[0], r[1]) for r in Block().load().pairs.values]
         self.truth_set = self._get_truth_set()
         self.evaluator = _Evaluator()
+        self.metaevaluator = _MetaEvaluator()
 
     def _get_truth_set(self):
         truth_path = os.path.join(Session().get_output_path(), "raw", "truth.csv")
@@ -125,12 +146,21 @@ class Evaluator(object):
         return y_t, y_p
 
     def evaluate(self):
-        y_t, y_p = self._src_ys()
-        src_res = self.evaluator.evaluate(y_t, y_p)
-        y_t, y_p = self._all_ys()
-        all_res = self.evaluator.evaluate(y_t, y_p)
+        if self.truth_set:
+            logger.debug("Truth set available")
+            y_t, y_p = self._src_ys()
+            src_res = self.evaluator.evaluate(y_t, y_p)
+            y_t, y_p = self._all_ys()
+            all_res = self.evaluator.evaluate(y_t, y_p)
+        else:
+            logger.debug("Truth set not available")
+            src_res = None
+            all_res = None
+        logger.debug("Metaevaluating")
+        meta_res = self.metaevaluator.evaluate()
         res = {
             "src": src_res,
-            "all": all_res
+            "all": all_res,
+            "meta": meta_res
         }
         return Evaluation(res=res)
