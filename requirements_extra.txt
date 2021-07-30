@@ -1,12 +1,14 @@
 fuzzywuzzy
+Faker
+names
 loguru
 click
 joblib
 sklearn
+# for synthetic data
 pandas
+#fasttext
 scipy
 python-Levenshtein
 textdistance
 py-stringmatching
-rho-pysparnn
-requests

@@ -2,7 +2,4 @@
 
 Here you can find the scripts that we ran to pre-train the e2elink package.
 
-Scripts were run in this order:
-1. tfidf_vectorizer.py
-2. synthetic_data.sh
-3. scoring_models.sh
+All files can be found [here](https://drive.google.com/drive/folders/1R22Ek1YyJbPGJeJzcsdsQ3HCOFBQGUsW?usp=sharing) for manual download.

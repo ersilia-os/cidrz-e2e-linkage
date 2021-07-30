@@ -1,0 +1,55 @@
+{
+    "source": {
+        "size": 1000,
+        "dupl": 0.01,
+        "visits": 1,
+        "sort_by_date": true,
+        "date_format": "%Y-%m-%d",
+        "swap_full_name": 0.01,
+        "abbreviate_full_name": 0.01,
+        "misspell_full_name": 0.1,
+        "name_misspelling_type": "Fast",
+        "age_format": "birth_date",
+        "name_format": "lower",
+        "split_full_name": false,
+        "shuffle_columns": false,
+        "hide_identifier": false,
+        "identifier_coverage": 0.25,
+        "date_coverage": 1.0,
+        "name_coverage": 1.0,
+        "age_coverage": 1.0,
+        "sex_format": "lower_abbrv",
+        "header": [
+            0,
+            0
+        ]
+    },
+    "target": {
+        "size": 10000,
+        "dupl": 0.1,
+        "visits": 1,
+        "sort_by_date": true,
+        "date_format": "%Y-%m-%d",
+        "swap_full_name": 0.01,
+        "abbreviate_full_name": 0.1,
+        "misspell_full_name": 0.01,
+        "name_misspelling_type": "Fast",
+        "age_format": "birth_date",
+        "name_format": "lower",
+        "split_full_name": false,
+        "shuffle_columns": false,
+        "hide_identifier": false,
+        "identifier_coverage": 0.1,
+        "date_coverage": 1.0,
+        "name_coverage": 0.95,
+        "age_coverage": 0.9,
+        "sex_format": "lower_abbrv",
+        "header": [
+            0,
+            0
+        ]
+    },
+    "truth": {
+        "exp_linkage_rate": 1.0
+    }
+}

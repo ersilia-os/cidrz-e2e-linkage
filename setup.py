@@ -24,20 +24,26 @@ with open("README.md", "r", encoding="utf8") as fh:
 with open("requirements.txt") as f:
     install_requires = f.read().splitlines()
 
+with open("requirements_extra.txt") as f:
+    install_requires_extra = f.read().splitlines()
+    extras_require = {
+        "dev": install_requires_extra
+    }
 
 setup(
     name="e2elink",
     version=version,
     cmdclass=cmdclass,
-    author="Miquel Duran-Frigola",
-    author_email="miquel@ersilia.io",
-    url="https://github.com/miquelduranfrigola/e2elink",
+    author="Mwansa Lumpa, Miquel Duran-Frigola",
+    author_email="mwansa.lumpa@cidrz.org, miquel@ersilia.io",
+    url="https://github.com/ersilia-os/e2elink",
     description="End-to-end record linkage aided by machine learning",
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="MIT",
     python_requires=">=3.7",
     install_requires=install_requires,
+    extras_require=extras_require,
     packages=find_packages(exclude=("utilities")),
     entry_points={"console_scripts": ["e2elink=e2elink.cli:cli"]},
     classifiers=(
@@ -48,7 +54,10 @@ setup(
     ),
     keywords="record-linkage machine-learning medical-informatics",
     project_urls={
-        "Source Code": "https://github.com/miquelduranfrigola/e2elink/",
+        "Source Code": "https://github.com/ersilia-os/e2elink/",
     },
     include_package_data=True,
+    package_data={
+        "": ['example/files/*.csv']
+    }
 )

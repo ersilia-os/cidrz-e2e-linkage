@@ -1,9 +1,14 @@
 import os
 import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
+from .. import logger
 
 from .. import MODELS_PATH
-from ..synthetic.fakers.namegenerator import NameGeneratorDefault, NameGenerator
+try:
+    from ..synthetic.fakers.namegenerator import NameGeneratorDefault, NameGenerator
+except:
+    NameGeneratorDefault = None
+    NameGenerator = None
 
 
 MAX_FEATURES = 200
@@ -21,6 +26,9 @@ class NameNgramVectorizer(object):
             self.mdl = None
 
     def fit(self):
+        if NameGeneratorDefault is None:
+            logger.error("Fitting is not allowed, probably because you did not install the package in developing [dev] mode.")
+            return
         data = []
         n = int(MAX_DATA / 4)
         ng = NameGeneratorDefault()

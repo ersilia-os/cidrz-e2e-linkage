@@ -3,6 +3,7 @@
 # Edited
 data/
 models/
+models_bkp/
 development.ipynb
 development.py
 
