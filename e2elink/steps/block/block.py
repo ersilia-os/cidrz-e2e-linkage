@@ -117,6 +117,8 @@ class Blocker(object):
             self.truth = None
 
     def block(self, k):
-        pairs, y = self.blocker.block(self.prep.src_df, self.prep.trg_df, self.truth, k=k)
+        pairs, y = self.blocker.block(
+            self.prep.src_df, self.prep.trg_df, self.truth, k=k
+        )
         pairs = pd.DataFrame(pairs, columns=["src", "trg"])
         return Block(pairs, y, k)

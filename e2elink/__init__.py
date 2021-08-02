@@ -11,6 +11,7 @@ from .utils.logging import logger
 
 # Path variables
 from .vars import MODELS_PATH
+from .vars import E2ELINK_DIR
 
 
 __all__ = ["__version__"]

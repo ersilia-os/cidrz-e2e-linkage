@@ -1,12 +1,19 @@
 import pandas as pd
 import numpy as np
 
-from ..preprocessing import age, birth_year, full_name, \
-    alphanumeric, date_field, custom_find_replace, format_output
+from ..preprocessing import (
+    age,
+    birth_year,
+    full_name,
+    alphanumeric,
+    date_field,
+    custom_find_replace,
+    format_output,
+)
 
 
 class Preprocess:
-    def __init__(self, dataframe,reference_field_objects):
+    def __init__(self, dataframe, reference_field_objects):
         self.reference_fields = reference_field_objects
         self.is_cleaned = False
         self.dataframe = dataframe
@@ -22,7 +29,6 @@ class Preprocess:
         self.__set_clean_dataframe(self.dataframe)
         self.is_cleaned = True
         return clean_output_fields, self.dataframe
-
 
     def __set_clean_dataframe(self, dataframe):
         self.__dataframe = dataframe
@@ -50,12 +56,11 @@ class Preprocess:
         return format_output.OutputFormat(output_format)
 
 
-
 def preprocess_test():
 
-    df = pd.read_csv('somefilepath')
+    df = pd.read_csv("somefilepath")
 
-    agefield = 'age'
+    agefield = "age"
     cacx_age = age.Age(agefield)
     cacx_fullname = age.Age(agefield)
     cacx_birth_year = age.Age(agefield)
@@ -68,5 +73,3 @@ def preprocess_test():
     cacx_file = pre_process.clean()
 
     return cacx_file
-
-

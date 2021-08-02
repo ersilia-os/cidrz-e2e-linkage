@@ -23,12 +23,19 @@ N = 10000
 
 
 class SchemaMatchingTrainer(object):
-
     def __init__(self):
-        self.data_path = os.path.abspath(os.path.join(DATA_PATH, "schema_matcher_train.csv"))
-        self.vectorizer_path = os.path.abspath(os.path.join(MODELS_PATH, "schema_matcher_vectorizer.pkl"))
-        self.model_path = os.path.abspath(os.path.join(MODELS_PATH, "schema_matcher.pkl"))
-        self.label_path = os.path.abspath(os.path.join(MODELS_PATH, "schema_matcher_labels.json"))
+        self.data_path = os.path.abspath(
+            os.path.join(DATA_PATH, "schema_matcher_train.csv")
+        )
+        self.vectorizer_path = os.path.abspath(
+            os.path.join(MODELS_PATH, "schema_matcher_vectorizer.pkl")
+        )
+        self.model_path = os.path.abspath(
+            os.path.join(MODELS_PATH, "schema_matcher.pkl")
+        )
+        self.label_path = os.path.abspath(
+            os.path.join(MODELS_PATH, "schema_matcher_labels.json")
+        )
 
     def generate_dataset(self):
         logger.debug("Generating dataset and writing to {0}".format(self.data_path))
@@ -36,7 +43,9 @@ class SchemaMatchingTrainer(object):
         logger.debug("Generating ages")
         gen = AgeGenerator()
         for _ in range(N):
-            R += [(gen.sample(30, 15)["years"], "age")] # Todo: this is just an example
+            R += [
+                (gen.sample(30, 15)["years"], "age")
+            ]  #  Todo: this is just an example
         logger.debug("Generating first names")
         gen = NameGeneratorDefault()
         for _ in range(N):
@@ -50,10 +59,20 @@ class SchemaMatchingTrainer(object):
         logger.debug("Generating visit dates")
         gen = DateGenerator()
         for _ in range(N):
-            R += [(gen.sample("2016-01-01", "2020-12-31").strftime("%Y-%m%d"), "visit_date")]
+            R += [
+                (
+                    gen.sample("2016-01-01", "2020-12-31").strftime("%Y-%m%d"),
+                    "visit_date",
+                )
+            ]
         logger.debug("Generating birth dates")
         for _ in range(N):
-            R += [(gen.sample("1960-01-01", "2000-12-31").strftime("%Y-%m%d"), "birth_date")]
+            R += [
+                (
+                    gen.sample("1960-01-01", "2000-12-31").strftime("%Y-%m%d"),
+                    "birth_date",
+                )
+            ]
         logger.debug("Writing results")
         with open(self.data_path, "w") as f:
             for r in R:
@@ -84,7 +103,7 @@ class SchemaMatchingTrainer(object):
             for r in reader:
                 labels.update([r[1]])
         labels = sorted(labels)
-        labels = dict((l, i) for i,l in enumerate(labels))
+        labels = dict((l, i) for i, l in enumerate(labels))
         logger.debug("Saving labels to {0}".format(self.label_path))
         with open(self.label_path, "w") as f:
             json.dump(labels, f, indent=4)

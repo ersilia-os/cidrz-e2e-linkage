@@ -7,14 +7,14 @@ from ..setup.setup import Session
 from ..schema.schema import SchemaMatch
 from ..preprocessing import preprocess, preprocessor, reference_field as ref
 
-'''
+"""
 get two files
 get the fields that are to be cleaned
 pass them to the preprocessor for the magic
 retrieve the results of the dataframe
 save them to your directory
 and save the cleaned columns as well
-'''
+"""
 
 
 class E2E_Preprocessor(object):
@@ -64,8 +64,12 @@ class E2E_Preprocessor(object):
         return: column names, cleaned dataset
         """
         if self.__has_run:
-            return self.__preprocessor.get_cleaned_column_names(), \
-                   self.__preprocessor.get_cleaned_dataset()
+            return (
+                self.__preprocessor.get_cleaned_column_names(),
+                self.__preprocessor.get_cleaned_dataset(),
+            )
 
         else:
-            raise Exception("Ensure the run function has been executed before loading files")
+            raise Exception(
+                "Ensure the run function has been executed before loading files"
+            )

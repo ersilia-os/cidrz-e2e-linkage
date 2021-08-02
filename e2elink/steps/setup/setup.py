@@ -57,7 +57,9 @@ class PipelineSetup(object):
         shutil.copyfile(self.src_file, os.path.join(self.output_dir, "raw", "src.csv"))
         shutil.copyfile(self.trg_file, os.path.join(self.output_dir, "raw", "trg.csv"))
         if self.truth_file is not None:
-            shutil.copyfile(self.truth_file, os.path.join(self.output_dir, "raw", "truth.csv"))
+            shutil.copyfile(
+                self.truth_file, os.path.join(self.output_dir, "raw", "truth.csv")
+            )
         logger.info("Created output folder structure at {0}".format(self.output_dir))
 
     def setup(self):

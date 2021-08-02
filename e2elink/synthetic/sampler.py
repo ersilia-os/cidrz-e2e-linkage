@@ -134,7 +134,9 @@ class SyntheticSampler(object):
                 res["truth_params"],
             )
             done += 1
-        logger.success("Done. Find results at {0}/{1}".format(self.data_path, identifier))
+        logger.success(
+            "Done. Find results at {0}/{1}".format(self.data_path, identifier)
+        )
 
     def load(self, identifier):
         dir = os.path.join(self.data_path, identifier)

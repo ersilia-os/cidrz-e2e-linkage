@@ -12,8 +12,8 @@ from ..block.block import Block
 
 NULL = 0
 
-class Evaluation(object):
 
+class Evaluation(object):
     def __init__(self, res=None):
         self.res = res
         self.path = Session().get_output_path()
@@ -32,7 +32,6 @@ class Evaluation(object):
 
 
 class _Evaluator(object):
-
     def __init__(self):
         pass
 
@@ -41,15 +40,15 @@ class _Evaluator(object):
         # Positives and negatives
         counts = {
             "pos": int(np.sum(y_t)),
-            "neg": int(len(y_t)-np.sum(y_t)),
-            "tot": int(len(y_t))
+            "neg": int(len(y_t) - np.sum(y_t)),
+            "tot": int(len(y_t)),
         }
         res["counts"] = counts
-        # Area under the roc curve
+        #  Area under the roc curve
         fpr, tpr, _ = roc_curve(y_t, y_p)
         res["auroc"] = auc(fpr, tpr)
         # Area under the precision recall curve
-        # Cutoff-specific (binary) metrics
+        #  Cutoff-specific (binary) metrics
         # TODO
         cuts = np.arange(0, 1, 0.01)
         y_p = np.array(y_p)
@@ -63,7 +62,7 @@ class _Evaluator(object):
             rep = {}
             y_p_ = np.zeros(len(y_p))
             y_p_[y_p >= cut] = 1
-            proportion += [np.sum(y_p_)/len(y_p_)]
+            proportion += [np.sum(y_p_) / len(y_p_)]
             if np.sum(y_p_) != 0:
                 f1 += [f1_score(y_t, y_p_)]
                 precision += [precision_score(y_t, y_p_)]
@@ -81,26 +80,26 @@ class _Evaluator(object):
 
 
 class _MetaEvaluator(object):
-
     def __init__(self):
         self.meta_path = os.path.join(Session().get_output_path(), "score", "meta.json")
 
     def evaluate(self):
-        logger.debug("Estimating performance from synthetic datasets {0}".format(self.meta_path))
+        logger.debug(
+            "Estimating performance from synthetic datasets {0}".format(self.meta_path)
+        )
         with open(self.meta_path, "r") as f:
             meta = json.load(f)
         cv_results = meta["cv_results"]
         weights = meta["weights"]
         values = collections.defaultdict(list)
         for d in cv_results:
-            for k,v in d.items():
+            for k, v in d.items():
                 values[k] += [v]
-        res = dict((k, np.average(v, weights=weights)) for k,v in values.items())
+        res = dict((k, np.average(v, weights=weights)) for k, v in values.items())
         return res
 
 
 class Evaluator(object):
-
     def __init__(self):
         self.y = Score().load().score
         self.pairs = [(r[0], r[1]) for r in Block().load().pairs.values]
@@ -158,9 +157,5 @@ class Evaluator(object):
             all_res = None
         logger.debug("Metaevaluating")
         meta_res = self.metaevaluator.evaluate()
-        res = {
-            "src": src_res,
-            "all": all_res,
-            "meta": meta_res
-        }
+        res = {"src": src_res, "all": all_res, "meta": meta_res}
         return Evaluation(res=res)

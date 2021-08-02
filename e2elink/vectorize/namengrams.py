@@ -4,6 +4,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from .. import logger
 
 from .. import MODELS_PATH
+
 try:
     from ..synthetic.fakers.namegenerator import NameGeneratorDefault, NameGenerator
 except:
@@ -27,7 +28,9 @@ class NameNgramVectorizer(object):
 
     def fit(self):
         if NameGeneratorDefault is None:
-            logger.error("Fitting is not allowed, probably because you did not install the package in developing [dev] mode.")
+            logger.error(
+                "Fitting is not allowed, probably because you did not install the package in developing [dev] mode."
+            )
             return
         data = []
         n = int(MAX_DATA / 4)

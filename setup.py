@@ -26,9 +26,7 @@ with open("requirements.txt") as f:
 
 with open("requirements_extra.txt") as f:
     install_requires_extra = f.read().splitlines()
-    extras_require = {
-        "dev": install_requires_extra
-    }
+    extras_require = {"dev": install_requires_extra}
 
 setup(
     name="e2elink",
@@ -53,11 +51,7 @@ setup(
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ),
     keywords="record-linkage machine-learning medical-informatics",
-    project_urls={
-        "Source Code": "https://github.com/ersilia-os/e2elink/",
-    },
+    project_urls={"Source Code": "https://github.com/ersilia-os/e2elink/",},
     include_package_data=True,
-    package_data={
-        "": ['example/files/*.csv']
-    }
+    package_data={"": ["example/files/*.csv"]},
 )

@@ -11,8 +11,8 @@ from ..setup.setup import Session
 
 SCORE_CUTOFF = 0.5
 
-class Results(object):
 
+class Results(object):
     def __init__(self, results):
         self.results = results
         self.dataset_names = [k for k, _ in results.items()]
@@ -20,11 +20,13 @@ class Results(object):
         self.names_path = os.path.join(self.path, "dataset_names.json")
 
     def save(self):
-        logger.debug("A list of results datasets is stored at {0}".format(self.names_path))
+        logger.debug(
+            "A list of results datasets is stored at {0}".format(self.names_path)
+        )
         with open(self.names_path, "w") as f:
             json.dump(self.dataset_names, f, indent=4)
         for k, df in self.results.items():
-            path = os.path.join(self.path, k+".csv")
+            path = os.path.join(self.path, k + ".csv")
             logger.debug("Saving results {0} in {1}".format(k, path))
             df.to_csv(path, index=False)
 
@@ -34,13 +36,12 @@ class Results(object):
             dataset_names = json.load(f)
         results = {}
         for ds in dataset_names:
-            path = os.path.join(self.path, ds+".csv")
+            path = os.path.join(self.path, ds + ".csv")
             results[ds] = pd.read_csv(path)
         return Results(results)
 
 
 class _Finisher(object):
-
     def __init__(self):
         self.columns = ["src_idx", "trg_idx", "score"]
         self.path = Session().get_output_path()
@@ -49,11 +50,11 @@ class _Finisher(object):
         src = collections.defaultdict(list)
         for r, s in zip(pairs, score):
             src[r[0]] += [(r[1], s)]
-        keys = sorted([k for k,v in src.items()])
+        keys = sorted([k for k, v in src.items()])
         R = []
         for k in keys:
             v = src[k]
-            v = sorted(v, key = lambda x: -x[1])[0]
+            v = sorted(v, key=lambda x: -x[1])[0]
             R += [(k, v[0], v[1])]
         df = pd.DataFrame(R, columns=self.columns)
         return df
@@ -70,7 +71,7 @@ class _Finisher(object):
         rename = {}
         for c in list(df.columns):
             rename[c] = c + "__" + sufix
-        return df.rename(columns = rename, inplace=False)
+        return df.rename(columns=rename, inplace=False)
 
     @staticmethod
     def _filter(df, idxs):
@@ -100,13 +101,12 @@ class _Finisher(object):
             "selected_pairs_idxs": df_2,
             "best_per_src": self._expand(df_0),
             "all_blocked_pairs": self._expand(df_1),
-            "selected_pairs": self._expand(df_1)
+            "selected_pairs": self._expand(df_1),
         }
         return results
 
 
 class Finisher(object):
-
     def __init__(self):
         self.pairs = [(r[0], r[1]) for r in Block().load().pairs.values]
         self.score = Score().load().score

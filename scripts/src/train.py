@@ -16,7 +16,6 @@ k = 5
 
 
 class Trainer(object):
-
     def __init__(self, tag):
         self.tag = tag
         self.input_dir = os.path.join(MODELS_PATH, "linkage", "data", "raw", tag)
@@ -30,7 +29,9 @@ class Trainer(object):
         self.truth_file = os.path.join(self.input_dir, "truth.csv")
 
     def _setup(self):
-        ps = PipelineSetup(self.src_file, self.trg_file, self.truth_file, self.output_dir)
+        ps = PipelineSetup(
+            self.src_file, self.trg_file, self.truth_file, self.output_dir
+        )
         ps.setup()
         logger.debug("Setup done")
 
@@ -72,7 +73,6 @@ class Trainer(object):
         self.prepare()
         logger.info("Training")
         self._score()
-
 
 
 if __name__ == "__main__":

@@ -16,11 +16,7 @@ from ...block.block import Block
 
 MAX_N = 10000
 
-SCORES = [
-    "roc_auc",
-    "precision",
-    "recall"
-]
+SCORES = ["roc_auc", "precision", "recall"]
 
 
 class _Model(object):
@@ -36,7 +32,6 @@ class _Model(object):
 
 
 class Model(object):
-
     def __init__(self, mdl=None, train_C=None, train_columns=None, cv_results=None):
         self.mdl = mdl
         self.path = os.path.join(Session().get_output_path(), "score")
@@ -72,20 +67,21 @@ class Model(object):
         logger.debug("Loading CV results from {0}".format(self.cv_results_path))
         with open(self.cv_results_path, "r") as f:
             cv_results = json.load(f)
-        return Model(mdl=mdl, train_C=train_C, train_columns=train_columns, cv_results=None)
+        return Model(
+            mdl=mdl, train_C=train_C, train_columns=train_columns, cv_results=None
+        )
 
 
 class _ModelTrainer(object):
-
     def __init__(self):
         self.mdl = _Model()
 
     def _cross_validate(self, C, y):
         logger.debug("Cross validating")
-        cv_results = cross_validate(self.mdl.base_mdl, C, y, scoring = SCORES)
+        cv_results = cross_validate(self.mdl.base_mdl, C, y, scoring=SCORES)
         scores = dict((k, "test_{0}".format(k)) for k in SCORES)
         cv_results_ = {}
-        for k,v in scores.items():
+        for k, v in scores.items():
             cv_results_[k] = np.mean(cv_results[v])
         return cv_results_
 
@@ -95,17 +91,11 @@ class _ModelTrainer(object):
         y = y[mask]
         self.mdl.fit(C, y)
         cv_results = self._cross_validate(C, y)
-        results = {
-            "mdl": self.mdl.mdl,
-            "C": C,
-            "y": y,
-            "cv_results": cv_results
-        }
+        results = {"mdl": self.mdl.mdl, "C": C, "y": y, "cv_results": cv_results}
         return results
 
 
 class ModelTrainer(object):
-
     def __init__(self):
         y_path = os.path.join(Session().get_output_path(), "block", "y.npy")
         if os.path.exists(y_path):

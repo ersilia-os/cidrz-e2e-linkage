@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
-from ..preprocessing import preprocess, age, full_name, \
-    birth_year, date_field, pp_utils
+from ..preprocessing import preprocess, age, full_name, birth_year, date_field, pp_utils
 
 
 class Preprocessor:
@@ -23,13 +22,15 @@ class Preprocessor:
                 self.clean_columns, self.__dataset = pprocess.clean()
                 self.__is_dataset_cleaned = True
             else:
-                raise Exception('no variables were defined for cleaning')
+                raise Exception("no variables were defined for cleaning")
 
     def set_age(self, age_column):
         self.__field_holder.append(age.Age(age_column))
 
     def set_fullname(self, fullname_column, other_column_names):
-        self.__field_holder.append(full_name.FullName(fullname_column, other_src_cols=[other_column_names]))
+        self.__field_holder.append(
+            full_name.FullName(fullname_column, other_src_cols=[other_column_names])
+        )
 
     def set_birth_year(self, birth_year_column):
         self.__field_holder.append(birth_year.BirthYear(birth_year_column))
@@ -52,18 +53,19 @@ class Preprocessor:
 
     def __load_raw_dataframe(self):
         if not self.__raw_dataset:
-             self.__raw_dataset = pd.read_csv(self.__source_file)
+            self.__raw_dataset = pd.read_csv(self.__source_file)
         return self.__raw_dataset
+
 
 def test(filepath):
 
     sourcepath1 = filepath
-    sourcepath2 = 'some path to anther file'
+    sourcepath2 = "some path to anther file"
 
     source1 = Preprocessor(sourcepath1)
-    source1.set_age('age_birth_year')
-    source1.set_birth_year('age_birth_year')
-    source1.set_fullname('name', 'enrol_date')
+    source1.set_age("age_birth_year")
+    source1.set_birth_year("age_birth_year")
+    source1.set_fullname("name", "enrol_date")
     source1.clean()
 
     # source2 = RawDatasetHandler(sourcepath2)

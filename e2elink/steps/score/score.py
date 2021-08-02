@@ -55,11 +55,7 @@ class _Scorer(object):
             T += [tag]
         P = np.array(P).T
         sc = np.average(P, axis=1, weights=W)
-        meta = {
-            "tags": T,
-            "cv_results": CV,
-            "weights": W
-        }
+        meta = {"tags": T, "cv_results": CV, "weights": W}
         return sc, meta
 
     def score(self, C):

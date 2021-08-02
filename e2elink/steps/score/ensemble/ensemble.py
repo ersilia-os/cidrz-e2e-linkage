@@ -16,7 +16,6 @@ MAX_N = 10
 
 
 class Predictor(object):
-
     def __init__(self, mdl):
         self.mdl = mdl
 
@@ -25,7 +24,6 @@ class Predictor(object):
 
 
 class DistributionCoincidence(object):
-
     def __init__(self, p, q):
         self.p = np.array(p)
         self.q = np.array(q)
@@ -46,7 +44,6 @@ class DistributionCoincidence(object):
 
 
 class ModelEnsembler(object):
-
     def __init__(self):
         self.output_path = Session().get_output_path()
         self.tags_path = os.path.join(MODELS_PATH, "linkage", "results")
@@ -54,7 +51,7 @@ class ModelEnsembler(object):
         if os.path.exists(this_mdl_path):
             logger.debug("Model exists for this dataset")
             self.mdl_paths = [this_mdl_path]
-            self.weights = [1.]
+            self.weights = [1.0]
             self.has_mdl = True
         else:
             logger.debug("Model does not exist for this dataset")
@@ -88,11 +85,11 @@ class ModelEnsembler(object):
         idxs_0 = np.random.choice(C_0.shape[0], n, replace=False)
         idxs_1 = np.random.choice(C_1.shape[1], n, replace=False)
         for i in range(C_0.shape[1]):
-            p = C_0[:,i]
-            q = C_1[:,i]
+            p = C_0[:, i]
+            q = C_1[:, i]
             p = p[idxs_0]
             q = q[idxs_1]
-            values += [DistributionCoincidence(p,q).mean_squared_error()]
+            values += [DistributionCoincidence(p, q).mean_squared_error()]
         return np.array(values)
 
     def _scan_pretrained_models(self):
@@ -108,13 +105,13 @@ class ModelEnsembler(object):
         R = np.array(R)
         X = np.zeros(R.shape)
         for i in range(R.shape[1]):
-            r = rankdata(R[:,i], method="ordinal")
-            X[:,i] = r/np.max(r)
+            r = rankdata(R[:, i], method="ordinal")
+            X[:, i] = r / np.max(r)
         S = np.median(X, axis=1)
         idxs = np.argsort(S)[:MAX_N]
         tags = [tags[i] for i in idxs]
-        scores = [len(idxs)-i for i in range(len(idxs))] # TODO: Refine score
-        scores = np.array(scores)/np.max(scores)
+        scores = [len(idxs) - i for i in range(len(idxs))]  #  TODO: Refine score
+        scores = np.array(scores) / np.max(scores)
         for tag, score in zip(tags, scores):
             yield tag, score
 
@@ -140,6 +137,6 @@ class ModelEnsembler(object):
                 "tag": tag,
                 "predictor": prd,
                 "weight": score,
-                "cv_results": cv_results
+                "cv_results": cv_results,
             }
             yield results

@@ -3,6 +3,7 @@ import shutil
 
 from e2elink import MODELS_PATH
 
+
 def remove(path):
     if not os.path.exists(path):
         return
@@ -10,6 +11,7 @@ def remove(path):
         shutil.rmtree(path)
     else:
         os.remove(path)
+
 
 remove(os.path.join(MODELS_PATH, "linkage", "data"))
 
