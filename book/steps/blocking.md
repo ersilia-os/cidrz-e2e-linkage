@@ -20,7 +20,7 @@ Blocking needs to be efficient computationally in order to work in low-resource 
 You can run blocking on pre-processed data. The only real parameter is the number of neighbors \(k\). We determine k automatically \(between 5 and 100\) based on the size of your datasets.
 
 ```text
-$ e2elink step block
+$ e2elink block
 ```
 
 This run will produce an index file based on the target data.

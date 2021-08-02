@@ -53,12 +53,6 @@ $ e2elink compare
 ```
 
 {% hint style="warning" %}
-This step can be slow. If you want to speed up the process, please consider reducing the k parameter in the blocking step or working with a less precise comparison.
+This step can be slow. If you want to speed up the process, please consider reducing the k parameter in the blocking step.
 {% endhint %}
-
-A lighter but less precise version of the comparisons can be achieved as follows:
-
-```text
-$ e2elink compare --light
-```
 

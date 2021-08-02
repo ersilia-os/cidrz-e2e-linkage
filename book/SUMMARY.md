@@ -7,6 +7,7 @@
 
 ## Steps
 
+* [Setup](steps/setup.md)
 * [Schema matching](steps/schema-matching.md)
 * [Preprocessing](steps/preprocessing.md)
 * [Blocking](steps/blocking.md)
