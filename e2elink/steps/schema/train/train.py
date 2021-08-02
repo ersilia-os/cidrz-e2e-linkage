@@ -1,6 +1,3 @@
-"""
-This script is currently very dirty and needs a lot of refactoring.
-"""
 import joblib
 import os
 import csv
@@ -61,7 +58,7 @@ class SchemaMatchingTrainer(object):
         for _ in range(N):
             R += [
                 (
-                    gen.sample("2016-01-01", "2020-12-31").strftime("%Y-%m%d"),
+                    gen.sample("2016-01-01", "2020-12-31").strftime("%Y-%m-%d"),
                     "visit_date",
                 )
             ]
@@ -69,7 +66,7 @@ class SchemaMatchingTrainer(object):
         for _ in range(N):
             R += [
                 (
-                    gen.sample("1960-01-01", "2000-12-31").strftime("%Y-%m%d"),
+                    gen.sample("1960-01-01", "2000-12-31").strftime("%Y-%m-%d"),
                     "birth_date",
                 )
             ]

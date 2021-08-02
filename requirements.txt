@@ -9,4 +9,4 @@ python-Levenshtein
 textdistance
 py-stringmatching
 rho-pysparnn
-requests
+gdown
