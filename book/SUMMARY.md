@@ -14,6 +14,7 @@
 * [Comparisons](steps/comparisons.md)
 * [Scoring](steps/scoring.md)
 * [Evaluation](steps/evaluation.md)
+* [Finish](steps/finish.md)
 
 ## Tools
 
@@ -22,8 +23,4 @@
 ## About
 
 * [Publications](about/publications.md)
-
----
-
-* [Finish](finish.md)
 
