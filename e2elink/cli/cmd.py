@@ -7,6 +7,11 @@ class Command(object):
 
         example_cmd()
 
+    def run(self):
+        from .commands.run import run_cmd
+
+        run_cmd()
+
     def setup(self):
         from .commands.setup import setup_cmd
 

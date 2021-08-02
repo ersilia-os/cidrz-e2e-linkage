@@ -8,6 +8,8 @@ def create_cli():
 
     cmd.example()
 
+    cmd.run()
+
     cmd.setup()
     cmd.schema()
     cmd.preprocess()
