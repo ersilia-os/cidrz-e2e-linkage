@@ -2,6 +2,7 @@ import joblib
 import os
 import csv
 import json
+import random
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
@@ -12,11 +13,14 @@ from .... import DATA_PATH, MODELS_PATH
 from ....synthetic.fakers.agegenerator import AgeGenerator
 from ....synthetic.fakers.dategenerator import DateGenerator
 from ....synthetic.fakers.namegenerator import NameGeneratorDefault
+from ....synthetic.fakers.sexgenerator import SexGenerator
 
 
 MAX_FEATURES = 1024
 NGRAM_RANGE = (2, 2)
 N = 10000
+
+DATE_FORMATS = ["%Y-%m-%d", "%Y-%m-%d", "%d %b %Y", "%b %d %Y", "%d/%m/%y", "%d-%m-%y"]
 
 
 class SchemaMatchingTrainer(object):
@@ -24,27 +28,37 @@ class SchemaMatchingTrainer(object):
         self.data_path = os.path.abspath(
             os.path.join(DATA_PATH, "schema_matcher_train.csv")
         )
+        self.models_schema_path = os.path.join(os.path.abspath(MODELS_PATH), "schema")
+        if not os.path.exists(self.models_schema_path):
+            os.mkdir(self.models_schema_path)
         self.vectorizer_path = os.path.abspath(
-            os.path.join(MODELS_PATH, "schema_matcher_vectorizer.pkl")
+            os.path.join(self.models_schema_path, "schema_matcher_vectorizer.pkl")
         )
         self.model_path = os.path.abspath(
-            os.path.join(MODELS_PATH, "schema_matcher.pkl")
+            os.path.join(self.models_schema_path, "schema_matcher.pkl")
         )
         self.label_path = os.path.abspath(
-            os.path.join(MODELS_PATH, "schema_matcher_labels.json")
+            os.path.join(self.models_schema_path, "schema_matcher_labels.json")
         )
 
-    def generate_dataset(self):
-        logger.debug("Generating dataset and writing to {0}".format(self.data_path))
-        R = []
+    @staticmethod
+    def __random_date_format():
+        return random.choice(DATE_FORMATS)
+
+    def _generate_age(self):
         logger.debug("Generating ages")
         gen = AgeGenerator()
+        R = []
         for _ in range(N):
             R += [
                 (gen.sample(30, 15)["years"], "age")
             ]  #  Todo: this is just an example
+        return R
+
+    def _generate_names(self):
         logger.debug("Generating first names")
         gen = NameGeneratorDefault()
+        R = []
         for _ in range(N):
             R += [(gen.first_name(), "first_name")]
         logger.debug("Generating last names")
@@ -53,12 +67,18 @@ class SchemaMatchingTrainer(object):
         logger.debug("Generating full names")
         for _ in range(N):
             R += [(gen.full_name(), "full_name")]
+        return R
+
+    def _generate_dates(self):
         logger.debug("Generating visit dates")
         gen = DateGenerator()
+        R = []
         for _ in range(N):
             R += [
                 (
-                    gen.sample("2016-01-01", "2020-12-31").strftime("%Y-%m-%d"),
+                    gen.sample("2016-01-01", "2020-12-31").strftime(
+                        self.__random_date_format()
+                    ),
                     "visit_date",
                 )
             ]
@@ -66,10 +86,34 @@ class SchemaMatchingTrainer(object):
         for _ in range(N):
             R += [
                 (
-                    gen.sample("1960-01-01", "2000-12-31").strftime("%Y-%m-%d"),
+                    gen.sample("1960-01-01", "2000-12-31").strftime(
+                        self.__random_date_format()
+                    ),
                     "birth_date",
                 )
             ]
+        return R
+
+    def _generate_sexs(self):
+        logger.debug("Generating sexs")
+        gen = SexGenerator()
+        R = []
+        for _ in range(N):
+            trunc = random.choice([True, False])
+            sex = gen.sample()
+            if trunc:
+                R += [(sex[0], "sex")]
+            else:
+                R += [(sex, "sex")]
+        return R
+
+    def generate_dataset(self):
+        logger.debug("Generating dataset and writing to {0}".format(self.data_path))
+        R = []
+        R += self._generate_age()
+        R += self._generate_names()
+        R += self._generate_sexs()
+        R += self._generate_dates()
         logger.debug("Writing results")
         with open(self.data_path, "w") as f:
             for r in R:
@@ -125,7 +169,7 @@ class SchemaMatchingTrainer(object):
         joblib.dump(mdl, self.model_path)
 
 
-if __name__ == "__main__":
+def train():
     smt = SchemaMatchingTrainer()
     smt.generate_dataset()
     smt.vectorize()

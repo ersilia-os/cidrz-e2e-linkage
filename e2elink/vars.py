@@ -11,6 +11,10 @@ MODELS_PATH = os.path.join(E2ELINK_DIR, "models")
 if not os.path.exists(MODELS_PATH):
     os.makedirs(MODELS_PATH)
 
+DATA_PATH = os.path.join(E2ELINK_DIR, "data")
+if not os.path.exists(DATA_PATH):
+    os.makedirs(DATA_PATH)
+
 # File names
 
 LOGGING_FILE = "console.log"

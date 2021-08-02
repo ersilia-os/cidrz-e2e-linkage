@@ -12,8 +12,8 @@ from .finish.finish import Finisher
 
 BLOCKING_K = 5
 
-class RunAll(object):
 
+class RunAll(object):
     def __init__(self, src_file, trg_file, truth_file=None, output_dir=None):
         self.src_file = src_file
         self.trg_file = trg_file
@@ -22,7 +22,9 @@ class RunAll(object):
 
     def run(self):
         logger.debug("Setup")
-        ps = PipelineSetup(self.src_file, self.trg_file, self.truth_file, self.output_dir)
+        ps = PipelineSetup(
+            self.src_file, self.trg_file, self.truth_file, self.output_dir
+        )
         ps.setup()
         logger.debug("Schema")
         sm = SchemaMatcher().match()

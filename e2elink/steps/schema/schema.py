@@ -6,6 +6,7 @@ import json
 from ... import logger
 
 from ..setup.setup import Session
+from .predict.predict import SchemaMatchingPredictor, SchemaMatchingSynonyms
 
 MAX_N = 100
 
@@ -55,12 +56,16 @@ class ContentSampler(object):
 class _SchemaMatcher(object):
     def __init__(self, filename):
         self.content = ContentSampler(filename).sample()
+        self.predictor = SchemaMatchingPredictor()
+        self.syns = SchemaMatchingSynonyms()
 
     def match(self):
         matching = {}
         for k, v in self.content.items():
-            # dummy matching, for now
-            matching[k] = k
+            c = self.syns.predict(k)
+            if c is None:
+                c = self.predictor.predict(v)
+            matching[k] = c
         return matching
 
 

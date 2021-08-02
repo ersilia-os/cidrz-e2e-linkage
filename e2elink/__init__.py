@@ -1,9 +1,3 @@
-# Remove warnings (especially for sklearn)
-def warn(*args, **kwargs):
-    pass
-import warnings
-warnings.warn = warn
-
 # Version
 from ._version import __version__
 
@@ -16,15 +10,31 @@ import os
 from .utils.logging import logger
 
 # Path variables
-from .vars import MODELS_PATH
 from .vars import E2ELINK_DIR
+from .vars import MODELS_PATH
+from .vars import DATA_PATH
 
-# Download data if not done
+# Download data if not done
 from .utils.download import Downloader
+
 dw = Downloader()
 if not dw.is_done():
-    logger.info("Downloading necessary data and models, as they are not available in {0}".format(MODELS_PATH))
+    logger.info(
+        "Downloading necessary data and models, as they are not available in {0}".format(
+            MODELS_PATH
+        )
+    )
     dw.download()
+
+# Remove warnings (especially for sklearn)
+import warnings
+
+
+def warn(*args, **kwargs):
+    pass
+
+
+warnings.warn = warn
 
 
 __all__ = ["__version__"]

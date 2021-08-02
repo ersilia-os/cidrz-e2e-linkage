@@ -21,8 +21,8 @@ class GoogleDriveDownloader(object):
         pass
 
     def download_file_from_google_drive(self, file_id, destination):
-        url = 'https://drive.google.com/uc?id={0}'.format(file_id)
-        output = 'here.zip'
+        url = "https://drive.google.com/uc?id={0}".format(file_id)
+        output = "here.zip"
         gdown.download(url, destination, quiet=False)
 
     def fetch_zip(self, file_id, destination):
@@ -65,12 +65,10 @@ class Downloader(object):
             shutil.rmtree(macosx_folder)
         status_file = self._status_file_name()
         logger.debug("Saving status file {0}".format(status_file))
-        status = {
-            "status": True
-        }
+        status = {"status": True}
         with open(status_file, "w") as f:
             json.dump(status, f, indent=True)
 
     def download_dev(self):
         logger.info("Downloading data and models for developer mode")
-        pass # TODO
+        pass  # TODO
