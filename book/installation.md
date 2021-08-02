@@ -13,10 +13,12 @@ $ conda create -n e2elink python=3.7
 $ conda activate e2elink
 ```
 
-Then simply run:
+Then simply run: 
 
 ```bash
-$ pip install e2elink
+$ git clone https://github.com/ersilia-os/cidrz-e2e-linkage.git
+$ cd cidrz-e2e-linkage
+$ pip install .
 ```
 
 {% hint style="success" %}
@@ -33,11 +35,11 @@ $ ersilia --help
 This package uses pre-trained machine-learning models and pre-computed synthetic data that require about 1 GB of disk space. These data will be downloaded the first time the software is run.
 {% endhint %}
 
-## For contributors
+## For developers
 
 The e2elink package contains many machine-learning functionalities that were necessary to prepare a pre-trained list of models. To obtain a fully-featured version of the tool, run:
 
 ```bash
-$ pip install e2elink[contrib]
+$ pip install .[dev]
 ```
 
