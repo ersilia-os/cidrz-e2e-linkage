@@ -13,6 +13,7 @@
 * [Blocking](steps/blocking.md)
 * [Comparisons](steps/comparisons.md)
 * [Scoring](steps/scoring.md)
+* [Evaluation](steps/evaluation.md)
 
 ## Tools
 
@@ -24,5 +25,5 @@
 
 ---
 
-* [Evaluation](evaluation.md)
+* [Finish](finish.md)
 
