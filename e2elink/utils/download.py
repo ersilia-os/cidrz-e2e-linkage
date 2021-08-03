@@ -11,7 +11,7 @@ from ..vars import MODELS_PATH
 
 FILE_ID = {
     "linkage.zip": "1mvBm_nJ2v-RuwQ78k7ZRhO8SurADONGn",
-    "schema.zip": "1n3JDjTdh6hAMK-dVKF1AFa9WS5a5inoM",
+    "schema.zip": "1YTlUvaJm8C09m0Krc13zBe5okiQ7GOul",
     "name_ngram.pkl.zip": "1mx755FJQQmyTFBdFDGGqoJaORl-Tptag",
 }
 
