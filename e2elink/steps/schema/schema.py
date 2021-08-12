@@ -64,6 +64,7 @@ class _SchemaMatcher(object):
         for k, v in self.content.items():
             c = self.syns.predict(k)
             if c is None:
+                v = map(str, v)
                 c = self.predictor.predict(v)
             matching[k] = c
         return matching

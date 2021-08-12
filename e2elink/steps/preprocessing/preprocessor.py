@@ -27,9 +27,15 @@ class Preprocessor:
     def set_age(self, age_column):
         self.__field_holder.append(age.Age(age_column))
 
-    def set_fullname(self, fullname_column, other_column_names):
+    def set_fullname(self, fullname_column, other_column_names=None):
+        other_columns = None
+        if other_column_names is None:
+            other_columns = None
+        else:
+            other_columns = [other_column_names]
+
         self.__field_holder.append(
-            full_name.FullName(fullname_column, other_src_cols=[other_column_names])
+            full_name.FullName(fullname_column, other_src_cols=other_columns)
         )
 
     def set_birth_year(self, birth_year_column):

@@ -3,7 +3,7 @@ import json
 import shutil
 from ...vars import E2ELINK_DIR
 from ... import logger
-
+import time
 SESSION_PARAMS = "session.json"
 
 
@@ -20,24 +20,36 @@ class Session(object):
 
 
 class PipelineSetup(object):
-    def __init__(self, src_file, trg_file, truth_file, output_dir):
+    def __init__(self, src_file, trg_file, truth_file, output_dir, column_mapping_file):
         self.src_file = os.path.abspath(src_file)
         self.trg_file = os.path.abspath(trg_file)
+
+        self.column_mapping = None
+        if column_mapping_file is not None:
+            column_mapping_file = os.path.abspath(column_mapping_file)
+            with open(column_mapping_file) as f:
+                self.column_mapping = json.load(f)
+
         if truth_file is not None:
             self.truth_file = os.path.abspath(truth_file)
         else:
             self.truth_file = None
+
         self.output_dir = os.path.abspath(output_dir)
         if os.path.exists(self.output_dir):
             logger.error("Output folder {0} exists!".format(self.output_dir))
-            raise Exception
-        else:
-            logger.debug("Output folder {0} created".format(self.output_dir))
-            os.makedirs(self.output_dir, exist_ok=True)
+            dir_suffix = time.strftime("%Y%m%d%H%M%S", time.localtime())
+            self.output_dir = "{0}_{1}".format(self.output_dir, dir_suffix)
+            #logger.info("creating new output director {0}{}".format())
+            #raise FileExistsError("The specified output folder {0} already exists".format(self.output_dir))
+        #else:
+        logger.debug("Output folder {0} created".format(self.output_dir))
+        os.makedirs(self.output_dir, exist_ok=True)
+
         self.session = Session()
-        params = {"output_dir": self.output_dir}
+        self.params = {"output_dir": self.output_dir}
         with open(self.session._params_json_file, "w") as f:
-            json.dump(params, f, indent=4)
+            json.dump(self.params, f, indent=4)
         logger.debug(
             "JSON parameters file {0} created".format(self.session._params_json_file)
         )

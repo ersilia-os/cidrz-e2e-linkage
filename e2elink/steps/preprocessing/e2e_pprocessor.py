@@ -32,6 +32,7 @@ class E2E_Preprocessor(object):
 
     def __set_field_column_map(self, preprocessor, col_field_mapping):
         for column, field in col_field_mapping.items():
+            field = field.lower()
             if field == ref.AGE:
                 preprocessor.set_age(column)
 
@@ -47,7 +48,7 @@ class E2E_Preprocessor(object):
                 raise Exception("field not passed or unknown")
 
     def run(self):
-        self.__set_field_column_map(self.__src_preprocessor, self.__col_mapping)
+        self.__set_field_column_map(self.__preprocessor, self.__col_mapping)
         self.__preprocessor.clean()
         self.__has_run = True
 
@@ -58,6 +59,7 @@ class E2E_Preprocessor(object):
                 self.__preprocessor.get_cleaned_dataset().to_csv(path)
         else:
             raise Exception("Ensure the run function has been executed before saving")
+        return self.__preprocessor.get_cleaned_column_names()
 
     def load(self):
         """
@@ -73,3 +75,33 @@ class E2E_Preprocessor(object):
             raise Exception(
                 "Ensure the run function has been executed before loading files"
             )
+
+
+class PreprocessPipelineHandler:
+
+    def __init__(self, pipeline_setup, column_mapping):
+        self.srcfile = pipeline_setup.src_file
+        self.trgfile = pipeline_setup.trg_file
+
+        #schema_fields = schema_match.load()
+        self.src_fields = column_mapping['src']
+        self.trg_fields = column_mapping['trg']
+
+        self.src_preprocessor = E2E_Preprocessor(self.srcfile, self.src_fields)
+        self.trg_preprocessor = E2E_Preprocessor(self.trgfile, self.trg_fields)
+
+        self.output_path = pipeline_setup.session.get_output_path()
+
+
+    def clean(self):
+        self.src_preprocessor.run()
+        self.trg_preprocessor.run()
+
+    def save(self):
+        src = os.path.join(self.output_path, "cleaned_src.csv")
+        trg = os.path.join(self.output_path, "cleaned_trg.csv")
+
+        src_columns = self.src_preprocessor.save(src)
+        trg_columns = self.trg_preprocessor.save(trg)
+
+        return src, src_columns, trg, trg_columns

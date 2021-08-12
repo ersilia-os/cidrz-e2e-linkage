@@ -11,7 +11,8 @@ def run_cmd():
     @click.option("--trg_file", type=click.STRING)
     @click.option("--truth_file", default=None, type=click.STRING)
     @click.option("--output_dir", default="output", type=click.STRING)
-    def run(src_file, trg_file, truth_file, output_dir):
+    @click.option("--column_mapping_file", default=None, type=click.STRING)
+    def run(src_file, trg_file, truth_file, output_dir, column_mapping_file):
         echo("Running pipeline")
-        run = RunAll(src_file, trg_file, truth_file, output_dir)
+        run = RunAll(src_file, trg_file, truth_file, output_dir, column_mapping_file)
         run.run()
