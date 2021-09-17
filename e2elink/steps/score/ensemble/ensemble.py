@@ -37,8 +37,8 @@ class DistributionCoincidence(object):
         return distance
 
     def mean_squared_error(self):
-        p = self.p
-        q = self.q
+        p = sorted(self.p)
+        q = sorted(self.q)
         mse = mean_squared_error(p, q)
         return mse
 

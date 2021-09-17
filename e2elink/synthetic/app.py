@@ -67,13 +67,13 @@ src_visits = st.sidebar.slider(
 # Dates
 st.sidebar.subheader("Date")
 src_date_sorted = st.sidebar.checkbox("Sorted dates", value=True)
-c01, c02 = st.sidebar.beta_columns(2)
+c01, c02 = st.sidebar.columns(2)
 src_date_lb = c01.date_input("First visit", datetime.strptime("2017-01-01", "%Y-%m-%d"))
 src_date_lb = datetime.strftime(src_date_lb, "%Y-%m-%d")
 src_date_ub = c02.date_input("Last visit", datetime.strptime("2020-12-31", "%Y-%m-%d"))
 src_date_ub = datetime.strftime(src_date_ub, "%Y-%m-%d")
 src_date_coverage = st.sidebar.slider("Date coverage (%)", 0, 100, 90) / 100
-c11, c12 = st.sidebar.beta_columns(2)
+c11, c12 = st.sidebar.columns(2)
 src_date_format = c11.selectbox(
     "Date format", ["2020-12-31", "31 Dec 2020", "31/12/20"], index=0
 )
@@ -90,7 +90,7 @@ src_date_missformat_rate = c12.slider("Date missformat (%)", 0, 100, 10)
 
 # Names
 st.sidebar.subheader("Name")
-c21, c22 = st.sidebar.beta_columns(2)
+c21, c22 = st.sidebar.columns(2)
 src_name_info = c21.radio("Name information", ["Full", "First & last"], index=0)
 if src_name_info == "Full":
     src_split_full_name = False
@@ -103,7 +103,7 @@ else:
     src_local = False
 src_female_prop = st.sidebar.slider("Proportion of females (%)", 0, 100, 50) / 100
 src_name_coverage = st.sidebar.slider("Name coverage (%)", 0, 100, 98) / 100
-c31, c32 = st.sidebar.beta_columns(2)
+c31, c32 = st.sidebar.columns(2)
 src_name_format = c31.selectbox(
     "Name format", ["John Smith", "john smith", "JOHN SMITH"], index=0
 )
@@ -124,7 +124,7 @@ src_name_misspelling_type = c32.radio("Misspelling type", ["Fast", "Accurate"], 
 
 # Age
 st.sidebar.subheader("Age")
-c41, c42 = st.sidebar.beta_columns(2)
+c41, c42 = st.sidebar.columns(2)
 src_age_format = c41.radio(
     "Age format", ["Date of birth", "Year of birth", "Age"], index=0
 )
@@ -201,7 +201,7 @@ linkage_difficulty = st.sidebar.radio("Linkage difficulty", ["Low", "High"])
 
 # Compute
 
-bc1, bc2, bc3 = st.beta_columns(3)
+bc1, bc2, bc3 = st.columns(3)
 compute = bc1.button("Generate!")
 refresh = bc2.button("Refresh")
 if refresh:
