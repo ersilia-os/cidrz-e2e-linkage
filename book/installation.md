@@ -18,7 +18,7 @@ Then simply run:
 ```bash
 $ git clone https://github.com/ersilia-os/cidrz-e2e-linkage.git
 $ cd cidrz-e2e-linkage
-$ pip install .
+$ pip install -e .
 ```
 
 {% hint style="success" %}
